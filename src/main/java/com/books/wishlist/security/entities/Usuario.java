@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -59,7 +60,7 @@ public class Usuario {
     @Email(message = "Formato de email no valido.")
     private String email;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @NotNull(message = "Rol no puede ser vacio.")
     @JoinTable(name="user_rol", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "rolid"))
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})

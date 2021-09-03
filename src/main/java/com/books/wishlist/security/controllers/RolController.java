@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -51,6 +52,7 @@ public class RolController {
 		return ResponseEntity.ok(rol);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<Rol> crearRol(@ApiParam(name="rol", value="Rol a crear", required = true)
 			@Valid @RequestBody Rol rol, BindingResult result){
@@ -65,6 +67,7 @@ public class RolController {
 		return ResponseEntity.status(status).body(nuevoRol);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "/{idRol}")
 	public ResponseEntity<Rol> modificarRol(@ApiParam(name="idRol", value="Id obligatorio del rol.", required = true) 
 	        @PathVariable("idRol") Long idRol, 
@@ -82,6 +85,7 @@ public class RolController {
 		return ResponseEntity.ok(nuevoRol); 
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value="/{idRol}")
 	public ResponseEntity<Rol> eliminarProduto(@ApiParam(name="idRol", required = true, value="Id del rol a eliminar.") 
 			@PathVariable("idRol") Long idRol){

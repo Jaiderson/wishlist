@@ -32,6 +32,7 @@ import com.books.wishlist.security.entities.Usuario;
 import com.books.wishlist.security.jwtokens.ProveedorToken;
 import com.books.wishlist.security.services.IRolService;
 import com.books.wishlist.security.services.IUsuarioService;
+import com.books.wishlist.utils.Dato;
 import com.google.common.collect.Sets;
 
 import io.swagger.annotations.ApiParam;
@@ -59,39 +60,89 @@ public class UsuarioController {
 	public ResponseEntity<Usuario> crearUsuario(
 			@ApiParam(name="usuario", value="Usuario a registrar.", required = true)
 			@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult result){
+
+		Dato dato = this.validarExistenciaUsuario(nuevoUsuario, result);
+		if(!dato.isOk()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, dato.getValor().toString());
+		}
+		
+		Usuario usuario = new Usuario(nuevoUsuario.getNomUsuario(), nuevoUsuario.getPassword(), nuevoUsuario.getEmail(), nuevoUsuario.getNomCompleto());        
+		dato = this.validarRoles(nuevoUsuario, usuario);
+		if(!dato.isOk()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, dato.getValor().toString());
+		}
+		String clave = passwordEncoder.encode(nuevoUsuario.getPassword());
+		usuario.setClave(clave);
+
+		usuario = usuarioService.crearUsuario(usuario);
+		return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+	}
+
+	/**
+	 * Metodo que aplica todas la validaciones de los datos de entrada y la existencia 
+	 * de un nombre de usario o email asociado a otro usuario.
+	 * 
+	 * @param nuevoUsuario Usuario a validar.
+	 * @param result Objeto usado para aplicar las validaciones anotadas en la clase <b>NuevoUsuario</b>. 
+	 * @return Dato con el valor de la inconsistencia si la encontro.
+	 */
+	private Dato validarExistenciaUsuario(NuevoUsuario nuevoUsuario, BindingResult result) {
+		Dato dato = new Dato();
+		dato.setOk(false);
+		
 		if(result.hasErrors()) {
 			MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
+			dato.setValor(msnError.getMensaje(result));
+			return dato;
 		}
 		String nomUsuario = nuevoUsuario.getNomUsuario().toUpperCase();
 		String email = nuevoUsuario.getEmail().toLowerCase();
 		if(usuarioService.existeUsuarioNomUsuario(nomUsuario)) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MensajeError.getMensageNomUsuario(nomUsuario));
+			dato.setValor(MensajeError.getMensageNomUsuario(nomUsuario));
+			return dato;
 		}
 		else if(usuarioService.existeUsuarioNomUsuario(email)) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MensajeError.getMensageNomUsuario(email));
+			dato.setValor(MensajeError.getMensageNomUsuario(email));
+			return dato;
 		}
-		String clave = passwordEncoder.encode(nuevoUsuario.getPassword());
-		Usuario usuario = new Usuario(nomUsuario, clave, email, nuevoUsuario.getNomCompleto());
+		nuevoUsuario.setNomUsuario(nomUsuario);
+		nuevoUsuario.setEmail(email);
+		dato.setOk(true);
+		return dato;
+	}
 
+	/**
+	 * Meto que permite validar la existencia de los roles asociados 
+	 * al usuario ya sea que vengan o no en la peticion.
+	 * 
+	 * @param nuevoUsuario Usuario de entrada a validar los roles.
+	 * @param usuario Usuario construido en el proceso de creacion.
+	 * @return Dato con la informacion si existen los roles.
+	 */
+	private Dato validarRoles(NuevoUsuario nuevoUsuario, Usuario usuario) {
+		Dato dato = new Dato();
+		dato.setOk(false);
+		
 		HashSet<Rol> roles = Sets.newHashSet();
 		if(nuevoUsuario.getRoles().isEmpty()) {
 			Optional<Rol> rol = rolService.buscarRol(ERol.USER);
 			if(!rol.isPresent()) {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MensajeError.SIN_ROLES);
+				dato.setValor(MensajeError.SIN_ROLES);
+				return dato;
 			}
 			roles.add(rol.get());
 		}
 		else {
 			List<Rol> rolesEncontrados = rolService.buscarRoles(nuevoUsuario.getRoles());
 			if(rolesEncontrados.size() != nuevoUsuario.getRoles().size()) {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST, MensajeError.ROL_NO_EXISTE);
+				dato.setValor(MensajeError.ROL_NO_EXISTE);
+				return dato;
 			}
 			roles.addAll(rolesEncontrados);
 			usuario.setRoles(roles);	
 		}
-		usuario = usuarioService.crearUsuario(usuario);
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
+		dato.setOk(true);
+		return dato;
 	}
 
     @PostMapping("/login")

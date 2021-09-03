@@ -32,7 +32,6 @@ public class Rol {
     
     @Column(name="rolname", unique = true)
     @NotNull(message = "El rol de usuario no puede ser vacio.")
-    @Size(min=4, max=50, message = "Cantidad de carateres del rol de usuario minima es 4 y maxima de 50.")
     @Enumerated(EnumType.STRING)
     @ApiModelProperty(position = 2, dataType = "String", value = "Nombre del rol de usuario. <br>", example = "USER", required = true)
     private ERol nombre;

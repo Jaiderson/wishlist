@@ -21,9 +21,11 @@ public interface IRolService {
 	public Optional<Rol> buscarRol(ERol rol);
 
 	public List<Rol> buscarRoles(Set<String> roles);
-	
+
 	public Rol buscarRol(String nombreRol);
-	
+
+
+
 	/***
 	 * Busca un rol de usuario dado su identificador unico <b>idRol</b>.
 	 * 
