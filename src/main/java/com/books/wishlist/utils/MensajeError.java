@@ -1,4 +1,4 @@
-package com.books.wishlist.security.dto;
+package com.books.wishlist.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class MensajeError {
 		try {
 			jsonString = mapper.writeValueAsString(this);
 		} catch (JsonProcessingException e) {
-			System.err.println(e.getMessage());
+			Consola.error("MensajeError.formatoJson: "+jsonString+" - "+e.getMessage());
 		}
 		return jsonString;
 	}

@@ -18,17 +18,22 @@ public interface IUsuarioService {
 	 */
 	public Optional<Usuario> buscarUsuarioPorNombre(String nombreUsuario);
 
+	/**
+	 * Busca si el nombre de un usuario <b>nomUsuario</b> ya existe.
+	 * 
+	 * @param nomUsuario Nombre de usuario a validar si existe.
+	 * @return True si el usuario con nombre <b>nomUsuario</b> ya existe de lo contrario false.
+	 */
 	public boolean existeUsuarioNomUsuario(String nomUsuario);
 
+	/**
+	 * Busca si el mail ingresado <b>email</b> ya esta asociado a un usuario existente.
+	 * 
+	 * @param email Email a validar si existe.
+	 * @return True si el <b>email</b> ya existe de lo contrario false.
+	 */
 	public boolean existeUsuarioEmail(String email);
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/***
 	 * Busca un usuario de usuario dado su identificador unico <b>idUsuario</b>.
 	 * 

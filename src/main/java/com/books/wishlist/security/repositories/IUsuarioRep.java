@@ -21,10 +21,6 @@ public interface IUsuarioRep  extends JpaRepository<Usuario, Long> {
 	 */
 	public Usuario findByIdUsuario(Long idUsuario);
 
-
-	
-	
-	
 	/**
 	 * Busca un usuario dado nombre de usuario <b>nomUsuario</b>.
 	 * 
@@ -33,14 +29,22 @@ public interface IUsuarioRep  extends JpaRepository<Usuario, Long> {
 	 */
 	public Optional<Usuario> findByNomUsuario(String nomUsuario);
 
+	/**
+	 * Busca si el nombre de un usuario <b>nomUsuario</b> ya existe.
+	 * 
+	 * @param nomUsuario Nombre de usuario a validar si existe.
+	 * @return True si el usuario con nombre <b>nomUsuario</b> ya existe de lo contrario false.
+	 */
 	public boolean existsByNomUsuario(String nomUsuario);
-	
+
+	/**
+	 * Busca si el mail ingresado <b>email</b> ya esta asociado a un usuario existente.
+	 * 
+	 * @param email Email a validar si existe.
+	 * @return True si el <b>email</b> ya existe de lo contrario false.
+	 */
 	public boolean existsByEmail(String email);
 
-
-	
-	
-	
 	/**
 	 * Busca un usuario dado el email de usuario <b>email</b>.
 	 * 

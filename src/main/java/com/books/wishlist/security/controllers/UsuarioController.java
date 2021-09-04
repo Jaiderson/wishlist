@@ -22,9 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.books.wishlist.security.dto.LoginUsuario;
-import com.books.wishlist.security.dto.MensajeError;
-import com.books.wishlist.security.dto.NuevoUsuario;
+import com.books.wishlist.security.dto.LoginUsuarioDto;
+import com.books.wishlist.security.dto.NuevoUsuarioDto;
 import com.books.wishlist.security.dto.TokenDto;
 import com.books.wishlist.security.entities.ERol;
 import com.books.wishlist.security.entities.Rol;
@@ -33,6 +32,7 @@ import com.books.wishlist.security.jwtokens.ProveedorToken;
 import com.books.wishlist.security.services.IRolService;
 import com.books.wishlist.security.services.IUsuarioService;
 import com.books.wishlist.utils.Dato;
+import com.books.wishlist.utils.MensajeError;
 import com.google.common.collect.Sets;
 
 import io.swagger.annotations.ApiParam;
@@ -59,7 +59,7 @@ public class UsuarioController {
 	@PostMapping
 	public ResponseEntity<Usuario> crearUsuario(
 			@ApiParam(name="usuario", value="Usuario a registrar.", required = true)
-			@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult result){
+			@Valid @RequestBody NuevoUsuarioDto nuevoUsuario, BindingResult result){
 
 		Dato dato = this.validarExistenciaUsuario(nuevoUsuario, result);
 		if(!dato.isOk()) {
@@ -86,7 +86,7 @@ public class UsuarioController {
 	 * @param result Objeto usado para aplicar las validaciones anotadas en la clase <b>NuevoUsuario</b>. 
 	 * @return Dato con el valor de la inconsistencia si la encontro.
 	 */
-	private Dato validarExistenciaUsuario(NuevoUsuario nuevoUsuario, BindingResult result) {
+	private Dato validarExistenciaUsuario(NuevoUsuarioDto nuevoUsuario, BindingResult result) {
 		Dato dato = new Dato();
 		dato.setOk(false);
 		
@@ -119,7 +119,7 @@ public class UsuarioController {
 	 * @param usuario Usuario construido en el proceso de creacion.
 	 * @return Dato con la informacion si existen los roles.
 	 */
-	private Dato validarRoles(NuevoUsuario nuevoUsuario, Usuario usuario) {
+	private Dato validarRoles(NuevoUsuarioDto nuevoUsuario, Usuario usuario) {
 		Dato dato = new Dato();
 		dato.setOk(false);
 		
@@ -146,7 +146,7 @@ public class UsuarioController {
 	}
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginUsuario loginUsuario, BindingResult result){
+    public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginUsuarioDto loginUsuario, BindingResult result){
         if(result.hasErrors()) {
 			MensajeError msnError = new MensajeError(MensajeError.LOGIN);
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));

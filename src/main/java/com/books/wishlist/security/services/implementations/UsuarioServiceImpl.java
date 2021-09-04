@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.books.wishlist.security.entities.Usuario;
 import com.books.wishlist.security.repositories.IUsuarioRep;
 import com.books.wishlist.security.services.IUsuarioService;
-import com.books.wishlist.utils.CodificarClave;
 
 @Service
 @Transactional
@@ -24,10 +23,12 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		return usuarioRep.findByNomUsuario(nombreUsuario);
 	}
 	
+	@Override
 	public boolean existeUsuarioNomUsuario(String nomUsuario) {
 		return usuarioRep.existsByNomUsuario(nomUsuario);
 	}
 
+	@Override
 	public boolean existeUsuarioEmail(String email) {
 		return usuarioRep.existsByEmail(email);
 	}
@@ -62,7 +63,6 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		if(null == actUsuario) {
 			return actUsuario;
 		}
-		actUsuario.setClave(CodificarClave.codificarClave(nuevaClave));
 		return usuarioRep.save(actUsuario);	
 	}
 

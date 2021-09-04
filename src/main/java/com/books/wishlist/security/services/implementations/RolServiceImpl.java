@@ -35,12 +35,6 @@ public class RolServiceImpl implements IRolService {
 		return rolRep.buscarRoles(roles);
 	}
 
-
-	
-	
-	
-	
-
 	@Override
 	public Rol buscarRol(Long idRol) {
 		return rolRep.findByIdRol(idRol);

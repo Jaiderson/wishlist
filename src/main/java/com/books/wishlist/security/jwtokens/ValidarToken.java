@@ -7,8 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,10 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.books.wishlist.security.services.implementations.UserDetailsServiceImpl;
+import com.books.wishlist.utils.Consola;
 
 public class ValidarToken extends OncePerRequestFilter{
-
-    private final static Logger logger = LoggerFactory.getLogger(ValidarToken.class);
 
     @Autowired
     private ProveedorToken proveedorToken;
@@ -40,7 +37,7 @@ public class ValidarToken extends OncePerRequestFilter{
                 SecurityContextHolder.getContext().setAuthentication(autenticacionUsuario);
             }
         } catch (Exception e){
-            logger.error("ValidarToken.doFilterInternal -> " + e.getMessage());
+            Consola.error("ValidarToken.doFilterInternal: " + e.getMessage());
         }
         filterChain.doFilter(requet, response);
     }

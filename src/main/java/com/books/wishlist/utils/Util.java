@@ -43,17 +43,8 @@ public class Util {
 		if(fecha == null){
 			return "";
 		}
-		
 		LocalDateTime fec = LocalDateTime.ofInstant(new Date(fecha.getTime()).toInstant(), ZoneId.systemDefault());
 		return fec.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
-//
-//	public static Date getFecha(LocalDateTime fecha){
-//		if(fecha == null){
-//			return null;
-//		}
-//	    Instant instant = fecha.atZone(ZoneId.systemDefault()).toInstant();
-//	    return Date.from(instant);		
-//	}
 
 }

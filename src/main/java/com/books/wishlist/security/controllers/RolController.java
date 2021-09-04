@@ -19,9 +19,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.books.wishlist.security.dto.MensajeError;
 import com.books.wishlist.security.entities.Rol;
 import com.books.wishlist.security.services.IRolService;
+import com.books.wishlist.services.clients.ClienteLibro;
+import com.books.wishlist.utils.MensajeError;
 
 import io.swagger.annotations.ApiParam;
 
@@ -34,6 +35,9 @@ public class RolController {
 
 	@GetMapping
 	public ResponseEntity<List<Rol>> listarRoles(){
+		ClienteLibro cliente = new ClienteLibro();
+		cliente.buscarLibros("  harry poter ");
+		
 		List<Rol> roles = rolService.consultarRoles();
 		if(roles.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No existen roles registrados.");

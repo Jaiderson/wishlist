@@ -2,14 +2,12 @@ package com.books.wishlist.security.jwtokens;
 
 import java.util.Date;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-
 import com.books.wishlist.security.entities.UsuarioAutorizado;
+import com.books.wishlist.utils.Consola;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -21,8 +19,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 @Component
 public class ProveedorToken {
 
-	private final static Logger logger = LoggerFactory.getLogger(PuntoEntrada.class);
-	
     @Value("${jwt.secret}")
     private String secret;
 
@@ -49,15 +45,15 @@ public class ProveedorToken {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             esValido = true;
         }catch (MalformedJwtException e){
-            logger.error("Token mal formado.");
+        	Consola.error("Token mal formado. "+e.getMessage());
         }catch (UnsupportedJwtException e){
-            logger.error("Token no soportado.");
+        	Consola.error("Token no soportado. "+e.getMessage());
         }catch (ExpiredJwtException e){
-            logger.error("Token expirado.");
+        	Consola.error("Token expirado. "+e.getMessage());
         }catch (IllegalArgumentException e){
-            logger.error("Token no valido o vacio.");
+        	Consola.error("Token no valido o vacio. "+e.getMessage());
         }catch (SignatureException e){
-            logger.error("Firma del token errada.");
+        	Consola.error("Firma del token errada. "+e.getMessage());
         }
         return esValido;
     }

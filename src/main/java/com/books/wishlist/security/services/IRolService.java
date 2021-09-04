@@ -12,19 +12,30 @@ import com.books.wishlist.security.entities.Rol;
 @Service
 public interface IRolService {
 
-	/***
-	 * Busca un rol de usuario dado su nombre unico <b>nombreRol</b>.
+	/**
+	 * Busca un rol de usuario dado su nombre <b>nombreRol</b>.
 	 * 
-	 * @param nombreRol Identificador unico del rol. 
-	 * @return Rol asociado al <b>nombreRol</b> o null si no se encuentra.
+	 * @param nombreRol Identificador unico del rol a buscar. 
+	 * @return Optional<Rol> asociado al <b>nombreRol</b>.
 	 */
 	public Optional<Rol> buscarRol(ERol rol);
 
+	/**
+	 * Dada una lista de roles <b>roles</b> realiza una busqueda de cada uno de 
+	 * ellos y retorna una lista con los roles encontrados.
+	 * 
+	 * @param roles Listado de roles a buscar. 
+	 * @return Lista de roles o lista vacia en caso de no encontrar ninguno.
+	 */
 	public List<Rol> buscarRoles(Set<String> roles);
 
+	/**
+	 * Busca un rol dado su nombre.
+	 * 
+	 * @param nombreRol Nombre del rol a buscar.
+	 * @return Rol encontrado o null sin no existe.
+	 */
 	public Rol buscarRol(String nombreRol);
-
-
 
 	/***
 	 * Busca un rol de usuario dado su identificador unico <b>idRol</b>.

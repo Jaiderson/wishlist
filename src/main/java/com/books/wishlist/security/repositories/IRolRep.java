@@ -23,6 +23,12 @@ public interface IRolRep extends JpaRepository<Rol, Long> {
 	 */
 	public Optional<Rol> findByNombre(ERol enumRol);
 
+	/**
+	 * Busca un Rol dado su nombre <b>nombreRol</b>.
+	 * 
+	 * @param nombreRol Nombre del rol.
+	 * @return Rol asociado al <b>nombreRol</b> o <b>null</b> en caso de no existir.
+	 */
 	@Query(value="select * from rols where rolname IN :roles ", nativeQuery = true)
 	public List<Rol> buscarRoles(@Param("roles") Set<String> roles);
 
