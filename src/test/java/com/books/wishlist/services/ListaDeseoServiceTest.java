@@ -63,7 +63,7 @@ class ListaDeseoServiceTest {
 
 	@Test
 	void buscarListaDeseoTest() {
-		this.listaDeseo = listaDeseoService.crearLista(listaDeseo);
+		this.listaDeseo = listaDeseoService.crearListaDeseo(listaDeseo);
 		assertThat(this.listaDeseo).isNotNull();
 		assertThat(this.listaDeseo.getIdLista()).isPositive();
 
@@ -73,30 +73,30 @@ class ListaDeseoServiceTest {
 
 	@Test
 	void crearListaDeseoTest() {
-		this.listaDeseo = listaDeseoService.crearLista(listaDeseo);
+		this.listaDeseo = listaDeseoService.crearListaDeseo(listaDeseo);
 		assertThat(this.listaDeseo).isNotNull();
 		assertThat(this.listaDeseo.getIdLista()).isPositive();
 	}
 
 	@Test
 	void modificarListaDeseoTest() {
-		this.listaDeseo = listaDeseoService.crearLista(listaDeseo);
+		this.listaDeseo = listaDeseoService.crearListaDeseo(listaDeseo);
 		assertThat(this.listaDeseo).isNotNull();
 		assertThat(this.listaDeseo.getIdLista()).isPositive();
 		
 		this.listaDeseo.getListaPk().setNomListaDeseos("Libros de PHP");
-		this.listaDeseo = listaDeseoService.modificarLista(listaDeseo);
+		this.listaDeseo = listaDeseoService.modificarListaDeseo(listaDeseo);
 		assertThat(this.listaDeseo).isNotNull();
 		assertThat(this.listaDeseo.getListaPk().getNomListaDeseos()).isEqualTo("Libros de PHP");
 	}
 
 	@Test
 	void eliminarListaDeseoTest() {
-		this.listaDeseo = listaDeseoService.crearLista(listaDeseo);
+		this.listaDeseo = listaDeseoService.crearListaDeseo(listaDeseo);
 		assertThat(this.listaDeseo).isNotNull();
 		assertThat(this.listaDeseo.getIdLista()).isPositive();
 		
-		this.listaDeseo = listaDeseoService.eliminarLista(this.listaDeseo.getListaPk());
+		this.listaDeseo = listaDeseoService.eliminarListaDeseo(this.listaDeseo.getListaPk());
 		this.listaDeseo = listaDeseoService.buscarListaDeseo(this.listaDeseo.getListaPk());
 		assertThat(this.listaDeseo).isNull();
 	}

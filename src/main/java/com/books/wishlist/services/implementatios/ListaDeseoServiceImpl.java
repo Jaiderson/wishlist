@@ -43,18 +43,20 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 	}
 
 	@Override
-	public ListaDeseo crearLista(ListaDeseo nuevaLista) {
+	public ListaDeseo crearListaDeseo(ListaDeseo nuevaLista) {
 		ListaDeseo listaDeseoDb = buscarListaDeseo(nuevaLista.getListaPk());
-		
 		if(null == listaDeseoDb) {
 			nuevaLista.setIdLista(listaDeseoRep.secuenciaListaLibro());
 			listaDeseoDb = listaDeseoRep.save(nuevaLista);
+		}
+		else {
+		    listaDeseoDb = null;
 		}
 		return listaDeseoDb;
 	}
 
 	@Override
-	public ListaDeseo modificarLista(ListaDeseo nuevaLista) {
+	public ListaDeseo modificarListaDeseo(ListaDeseo nuevaLista) {
 		//ListaDeseo listaDeseoDb = buscarListaDeseo(nuevaLista.getListaPk());
 		ListaDeseo listaDeseoDb = buscarListaDeseo(nuevaLista.getIdLista());
 		if(null != listaDeseoDb) {
@@ -65,7 +67,7 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 	}
 
 	@Override
-	public ListaDeseo eliminarLista(ListaLibroPk listaLibroPk) {
+	public ListaDeseo eliminarListaDeseo(ListaLibroPk listaLibroPk) {
 		ListaDeseo listaDeseoDb = buscarListaDeseo(listaLibroPk);
 		if(null != listaDeseoDb) {
 			listaDeseoRep.delete(listaDeseoDb);

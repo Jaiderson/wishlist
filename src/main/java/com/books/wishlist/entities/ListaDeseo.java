@@ -54,7 +54,7 @@ public class ListaDeseo {
     inverseJoinColumns = @JoinColumn(name = "bookid_api"))
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     @ApiModelProperty(position=4, dataType="Set<Libro>")
-	private Set<Libro> libros = Sets.newHashSet();
+    private Set<Libro> libros = Sets.newHashSet();
 
     @PrePersist
     public void prePersist() {

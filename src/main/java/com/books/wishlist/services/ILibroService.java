@@ -19,17 +19,17 @@ public interface ILibroService {
 	public Libro modificarLibro(ListaLibroPk listaLibro, Libro libro);
 
 	public Libro eliminarLibro(ListaLibroPk listaLibro, String idLibroApi);
-	
 
-	
-	
+
+
+
+
 	public Libro buscarLibroPorIdApiGoogle(String idLibroApi);
-	
+
 	public Libro crearLibro(Libro nuevoLibro);
-	
+
 	public Libro modificarLibro(Libro libro);
 
 	public Libro eliminarLibro(String idLibroApi);
-	
 
 }

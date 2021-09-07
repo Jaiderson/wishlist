@@ -45,7 +45,7 @@ public class ListaDeseoController {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
         }
-        ListaDeseo nuevaListaDeseo = listaDeseoService.crearLista(nuevaLista);
+        ListaDeseo nuevaListaDeseo = listaDeseoService.crearListaDeseo(nuevaLista);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevaListaDeseo);
     }
 
@@ -56,7 +56,7 @@ public class ListaDeseoController {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
         }
-        ListaDeseo listaDeseo = listaDeseoService.modificarLista(lista);
+        ListaDeseo listaDeseo = listaDeseoService.modificarListaDeseo(lista);
         if(null == listaDeseo) {
         	throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lista a modificar no encontrada.");
 		}
