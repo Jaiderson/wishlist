@@ -15,6 +15,11 @@ import com.books.wishlist.security.services.IUsuarioService;
 @Transactional
 public class UsuarioServiceImpl implements IUsuarioService {
 
+	public UsuarioServiceImpl(IUsuarioRep usuarioRep) {
+		super();
+		this.usuarioRep = usuarioRep;
+	}
+	
 	@Autowired
 	private IUsuarioRep usuarioRep;
 
@@ -50,7 +55,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
 	@Override
 	public Usuario modificarUsuario(Usuario usuario) {
-		Optional<Usuario> actUsuario = usuarioRep.findByNomUsuario(usuario.getNombre());
+		Optional<Usuario> actUsuario = usuarioRep.findByNomUsuario(usuario.getNomUsuario());
 		if(!actUsuario.isPresent()) {
 			return null;
 		}

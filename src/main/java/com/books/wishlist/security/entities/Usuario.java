@@ -1,5 +1,6 @@
 package com.books.wishlist.security.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -25,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Sets;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,9 +35,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity(name="users")
-@NoArgsConstructor @Getter @Setter @ToString
+@AllArgsConstructor @NoArgsConstructor @Builder
+@Getter @Setter @ToString
 @Data
-public class Usuario {
+public class Usuario implements Serializable{
+
+	private static final long serialVersionUID = 2L;
 
 	@Id
     @Column(name="userid")

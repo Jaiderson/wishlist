@@ -37,7 +37,7 @@ spring:
     show-sql: true
     database: postgresql
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 logging:
@@ -46,4 +46,4 @@ logging:
     level: org.springframework.web=DEBUG
 
 jwt.secret: secret
-jwt.expiration: 3600
+jwt.expiration: 36000

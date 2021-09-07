@@ -6,7 +6,10 @@ import lombok.Getter;
 public enum ERol {
 
 	ADMIN("ADMIN"),
-	USER("USER");
+	USER("USER"),
+	ADMIN_TEST("ADMIN_TEST"),
+	USER_TEST("USER_TEST"),
+	OTHER_TEST("OTHER_USER_TEST");
 
 	private String nombreRol;
 

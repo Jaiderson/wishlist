@@ -1,5 +1,7 @@
 package com.books.wishlist.utils;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,7 @@ import lombok.ToString;
 public class Dato {
 
 	private Object valor;
+	private HttpStatus estado;
 	private boolean ok;
 
 }

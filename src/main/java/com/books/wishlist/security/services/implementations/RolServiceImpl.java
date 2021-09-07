@@ -20,6 +20,11 @@ public class RolServiceImpl implements IRolService {
 	@Autowired
 	private IRolRep rolRep;
 
+	public RolServiceImpl(IRolRep rolRep) {
+		super();
+		this.rolRep = rolRep;
+	}
+	
 	@Override
 	public Optional<Rol> buscarRol(ERol rol) {
 		return rolRep.findByNombre(rol);

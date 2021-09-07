@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity(name="rols")
-@NoArgsConstructor @Getter @Setter @ToString
+@NoArgsConstructor @AllArgsConstructor @Getter @Setter @ToString
 @Data
 @ApiModel(description = "Roles o perfiles de usuarios del sistema wishlist.")
 public class Rol {
