@@ -26,6 +26,11 @@ public interface ILibroRep  extends JpaRepository<Libro, Long> {
                              @Param("nomLista") String nomLista,
                              @Param("idLibroApi") String idLibroApi);
 
+	@Query(value="Select * From books Where title like %:nombreLibro% ", nativeQuery = true)
+	public List<Libro> buscarLibrosPorNombre(@Param("nombreLibro") String nombreLibro);
+
 	public Libro findByIdLibroApi(String idLibroApi);
+
+	public Libro findByIdLibro(Long idLibro);
 
 }

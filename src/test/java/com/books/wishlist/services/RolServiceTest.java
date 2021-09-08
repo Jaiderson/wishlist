@@ -33,6 +33,8 @@ class RolServiceTest {
 
 	@Test
 	void buscarRolTest() {
+		Rol rol = new Rol(ERol.OTHER_TEST, null);
+		rol = rolService.crearRol(rol);
 		List<Rol> roles = rolService.consultarRoles();
 		assertThat(roles).isNotNull().isNotEmpty();
 	}

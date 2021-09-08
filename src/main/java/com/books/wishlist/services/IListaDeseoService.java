@@ -4,55 +4,70 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.books.wishlist.entities.Libro;
 import com.books.wishlist.entities.ListaDeseo;
-import com.books.wishlist.entities.ListaLibroPk;
-import com.books.wishlist.security.controllers.RequestMensaje;
+import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
 public interface IListaDeseoService {
 
-	public List<ListaDeseo> listarTodas();
-
-	public ListaDeseo buscarListaDeseo(ListaLibroPk listaLibroPk);
+	/**
+	 * Busca una lista de deseos dado su identificador unico de usuario <b>idUsuario</b>.
+	 * 
+	 * @param idUsuario Identificador unico del usuario.
+	 * @return Todas las listas de deseos del usuario o una lista vacia si no tiene registradas.
+	 */
+	public List<ListaDeseo> buscarListasDeseoPorIdUsuario(Long idUsuario);
 
 	/**
-	 * Crea un lista de deseos asociada a un usuario. Para el nodo de usuario solo es requerido el idUsuario
-	 * los demas datos del usuairo no son requeridos.
+	 * Busca una lista de deseos dado su identificador unico <b>idLista</b>
 	 * 
-	 * Esta opcion permite registrar la lista de libros asociada a la nueva lista de deseos..
+	 * @param idLista Identificador unico de la lista de deseos.
+	 * @return Lista de deseos o <b>null</b> si no la encuentra.
+	 */
+	public ListaDeseo buscarListaDeseo(Long idLista);
+
+	/**
+	 * Busca una lista de deseos por si clave unica, es decir busca por posicion de la lista,
+	 * nombre de la lista y id de su usuario por lo que estos atributos son obligatorios.
+	 * 
+	 * @param listaDeseo Lista de deseo a buscar.
+	 * @return Lista de deseos o <b>null</b> si no la encuentra.
+	 */
+	public ListaDeseo buscarListaDeseo(ListaDeseo listaDeseo);
+
+	/**
+	 * Crea una lista de deseos asociada a un usuario. 
+	 * Para el nodo de usuario solo es requerido el <b>idUsuario</b>. 
+	 * Retorna un mensaje respuesta el cual contiene el HttpStatus de la solicitud y 
+	 * un listado de inconsistencias, si todo es <b>OK</b> este listado sera vacio.
 	 * 
 	 * @param nuevaLista Lista de deseos a registrar.
-	 * @return Lista de deseos o null si ya existe la lista a ingresar.
+	 * @return Mensaje de respuesta con el estado http.
 	 */
-	public ListaDeseo crearListaDeseo(ListaDeseo nuevaLista);
+	public MensajeRespuesta crearListaDeseo(ListaDeseo nuevaLista);
 
 	/**
-	 * Permite modificar la informacion de la lista de deseos pero no sus listas de libros.
-	 * Para ello utilce los metodos agregarLibros o eliminarLibros
+	 * Crea una lista de deseos nueva asociada a un usuario. 
+	 * Para el nodo de usuario solo es requerido el <b>idUsuario</b>. 
+	 * Retorna un mensaje respuesta el cual contiene el HttpStatus de la solicitud y 
+	 * un listado de inconsistencias, si todo es OK este listado sera vacio.
 	 * 
-	 * @param nuevaLista
-	 * @return
+	 * Esta opcion permite actualizar el nombre de la lista y la posicion de esta.
+	 * 
+	 * @param listaDeseos Lista de deseos a modificar.
+	 * @return Mensaje de respuesta con el estado http.
 	 */
-	public ListaDeseo modificarListaDeseo(ListaDeseo nuevaLista);
+	public MensajeRespuesta modificarListaDeseo(ListaDeseo listaDeseos);
 
-	public ListaDeseo eliminarListaDeseo(ListaLibroPk listaLibroPk);
-
-
-	
-	
-	
-	
-	public ListaDeseo buscarListaDeseo(Long id);
-	
-	public RequestMensaje agregarLibro(ListaLibroPk listaLibroPk, Libro libro);
-	
-	public ListaDeseo agregarLibros(List<Libro> libros, Long id);
-
-	public ListaDeseo eliminarLibro(Libro libro, Long id);
-	
-	public ListaDeseo eliminarLibros(List<Libro> libros, Long id);
-
-	public ListaDeseo eliminarLibros();
+	/**
+	 * Elimina una lista de deseos dado su id <b>idLista</b> junto con los libros asociados a esta. 
+	 * 
+	 * Retorna un mensaje respuesta el cual contiene el HttpStatus de la solicitud y 
+	 * un listado de inconsistencias, si todo es OK este listado sera vacio.
+	 * 
+	 * @param idLista Id unico de la lista a eliminar
+	 * @return Mensaje de respuesta con el estado http.
+	 */
+	public MensajeRespuesta eliminarListaDeseo(Long idLista);
 
 }

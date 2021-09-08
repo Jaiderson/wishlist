@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.books.wishlist.entities.Libro;
-import com.books.wishlist.entities.ListaLibroPk;
 import com.books.wishlist.repositories.ILibroRep;
 import com.books.wishlist.services.ILibroService;
+import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
 public class LibroServiceImpl implements ILibroService {
@@ -22,77 +22,82 @@ public class LibroServiceImpl implements ILibroService {
 	private ILibroRep libroRep;
 
 	@Override
-	public List<Libro> listarLibros(ListaLibroPk listaLibro) {
-		return libroRep.buscarLibros(listaLibro.getUsuario().getIdUsuario(), 
-				                     listaLibro.getPosicion(), 
-				                     listaLibro.getNomListaDeseos());
-	}
-
-	@Override
-	public Libro buscarLibroPorId(ListaLibroPk listaLibro, String idLibroApi) {
-		return libroRep.buscarLibro(listaLibro.getUsuario().getIdUsuario(), 
-				                    listaLibro.getPosicion(), 
-				                    listaLibro.getNomListaDeseos(),
-				                    idLibroApi);
-	}
-
-	@Override
-	public Libro crearLibro(ListaLibroPk listaLibro, Libro nuevoLibro) {
-		Libro libroDb = buscarLibroPorId(listaLibro, nuevoLibro.getIdLibroApi());
-		if(null == libroDb) {
-			libroDb = libroRep.save(nuevoLibro);
-		}
-		return libroDb;
-	}
-
-	@Override
-	public Libro modificarLibro(ListaLibroPk listaLibro, Libro libro) {
-		Libro libroDb = buscarLibroPorId(listaLibro, libro.getIdLibroApi());
-		if(null != libroDb) {
-			libroDb = libroRep.save(libro);
-		}
-		return libroDb;
-	}
-
-	@Override
-	public Libro eliminarLibro(ListaLibroPk listaLibro, String idLibroApi) {
-		Libro libroDb = buscarLibroPorId(listaLibro, idLibroApi);
-		if(null != libroDb) {
-			libroRep.delete(libroDb);
-		}
-		return libroDb;
-	}
-
-	@Override
-	public Libro crearLibro(Libro nuevoLibro) {
-		Libro libroDb = buscarLibroPorIdApiGoogle(nuevoLibro.getIdLibroApi());
-		if(null == libroDb) {
-			libroDb = libroRep.save(nuevoLibro);
-		}
-		return libroDb;
-	}
-
-	@Override
-	public Libro modificarLibro(Libro libro) {
-		Libro libroDb = buscarLibroPorIdApiGoogle(libro.getIdLibroApi());
-		if(null != libroDb) {
-			libroDb = libroRep.save(libro);
-		}
-		return libroDb;
-	}
-
-	@Override
-	public Libro eliminarLibro(String idLibroApi) {
-		Libro libroDb = buscarLibroPorIdApiGoogle(idLibroApi);
-		if(null != libroDb) {
-			libroRep.delete(libroDb);
-		}
-		return libroDb;
+	public Libro buscarLibroPorIdLibro(Long idLibro) {
+		return libroRep.findByIdLibro(idLibro);
 	}
 
 	@Override
 	public Libro buscarLibroPorIdApiGoogle(String idLibroApi) {
 		return libroRep.findByIdLibroApi(idLibroApi);
+	}
+
+	@Override
+	public List<Libro> buscarLibrosPorNombre(String nombreLibro) {
+		return libroRep.buscarLibrosPorNombre(nombreLibro);
+	}
+
+	@Override
+	public MensajeRespuesta crearLibro(Libro nuevoLibro) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		Libro libroBd = buscarLibroPorIdApiGoogle(nuevoLibro.getIdLibroApi());
+		if(null == libroBd) {
+			 libroRep.save(nuevoLibro);
+			 msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+		}
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.YA_EXISTE);
+			msnRespuesta.setEstado(MensajeRespuesta.YA_EXISTE);
+		}
+		return msnRespuesta;
+	}
+
+	@Override
+	public MensajeRespuesta modificarLibro(Libro libro) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		Libro libroBd = buscarLibroPorIdApiGoogle(libro.getIdLibroApi());
+		if(null != libroBd) {
+			 libro.setIdLibro(libroBd.getIdLibro());
+			 libro.setFecCreacion(libroBd.getFecCreacion());
+			 this.guardarLiro(msnRespuesta, libro);
+			 msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+		}
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE);
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
+	}
+
+	@Override
+	public MensajeRespuesta eliminarLibro(Long idLibro) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		Libro libroBd = buscarLibroPorIdLibro(idLibro);
+		if(null != libroBd) {
+			libroRep.delete(libroBd);
+			msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+		}
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE);
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
+	}
+
+	/**
+	 * Metodo usado para guardar la informacion de una lista de deseos, en caso de encontrar
+	 * inconsistencias se guardaran en el objeto de entrada <b>msnRespuesta</b>.
+	 * 
+	 * @param msnRespuesta Objeto en el cual se guardara las inconsistencias en caso de encontrar alguna.
+	 * @param libro Libro a guardar.
+	 */
+	private void guardarLiro(MensajeRespuesta msnRespuesta, Libro libro) {
+		try {
+			libroRep.save(libro);
+		}
+		catch (Exception e) {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.SQL_ERROR + " "+ e.getMessage());
+			msnRespuesta.setEstado(MensajeRespuesta.SQL_ERROR);
+		}
 	}
 
 }

@@ -9,19 +9,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.books.wishlist.entities.Libro;
 import com.books.wishlist.entities.ListaDeseo;
-import com.books.wishlist.security.controllers.RequestMensaje;
 import com.books.wishlist.services.IListaDeseoService;
 import com.books.wishlist.utils.MensajeError;
-import com.google.common.collect.Lists;
+import com.books.wishlist.utils.MensajeRespuesta;
 
 @Controller
 @RequestMapping(value = "/listaDeseos")
@@ -30,54 +30,43 @@ public class ListaDeseoController {
 	@Autowired
 	private IListaDeseoService listaDeseoService;
 
-    @GetMapping
-    public ResponseEntity<List<ListaDeseo>> listarTodo(){
-        List<ListaDeseo> listasDeseos = listaDeseoService.listarTodas();
+    @GetMapping(value = "/{idUsuario}")
+    public ResponseEntity<List<ListaDeseo>> buscarListasDeseoPorIdUsuario(
+    		@PathVariable(name="idUsuario", required = true) Long idUsuario){
+        List<ListaDeseo> listasDeseos = listaDeseoService.buscarListasDeseoPorIdUsuario(idUsuario);
         if(listasDeseos.isEmpty()) {
-        	throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No existen listas de deseos registradas.");
+        	throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No existen listas de deseos registradas para el usuario id = "+idUsuario);
         }
         return ResponseEntity.ok(listasDeseos); 
     }
 
     @PostMapping
-    public ResponseEntity<ListaDeseo> crearListaDeseo(@Valid @RequestBody ListaDeseo nuevaLista, BindingResult result){
+    public ResponseEntity<MensajeRespuesta> crearListaDeseo(@Valid @RequestBody ListaDeseo nuevaLista, BindingResult result){
         if(result.hasErrors()) {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
         }
-        ListaDeseo nuevaListaDeseo = listaDeseoService.crearListaDeseo(nuevaLista);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaListaDeseo);
+        MensajeRespuesta msnRespuesta = listaDeseoService.crearListaDeseo(nuevaLista);
+        return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
 
     @PutMapping
-    public ResponseEntity<ListaDeseo> modificarListaDeseo(
+    public ResponseEntity<MensajeRespuesta> modificarListaDeseo(
     		@Valid @RequestBody ListaDeseo lista, BindingResult result){
         if(result.hasErrors()) {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
         }
-        ListaDeseo listaDeseo = listaDeseoService.modificarListaDeseo(lista);
-        if(null == listaDeseo) {
-        	throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Lista a modificar no encontrada.");
-		}
-        return ResponseEntity.status(HttpStatus.OK).body(listaDeseo);
+        MensajeRespuesta msnRespuesta = listaDeseoService.modificarListaDeseo(lista);
+        return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
 
-    
-    @PutMapping(value = "/agregarLibro")
-    public ResponseEntity<ListaDeseo> agregraLibro(
-    		@Valid @RequestBody ListaDeseo listaDeseo, BindingResult result){
-        if(result.hasErrors()) {
-            MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
-        }
-        List<Libro> libros = Lists.newArrayList(listaDeseo.getLibros());
-        Libro libro = libros.get(0);
-        RequestMensaje msnRequest = listaDeseoService.agregarLibro(listaDeseo.getListaPk(), libro);
+    @DeleteMapping(value="/{idListaDeseo}")
+    public ResponseEntity<MensajeRespuesta> eliminarListaDeseo(
+    		@PathVariable("idListaDeseo") Long idListaDeseo){
 
-        if(!msnRequest.isOk()) {
-        	throw new ResponseStatusException(msnRequest.getStatus(), msnRequest.getValor().toString());
-		}
-        return ResponseEntity.status(HttpStatus.OK).body((ListaDeseo) msnRequest.getValor());
+        MensajeRespuesta msnRespuesta = listaDeseoService.eliminarListaDeseo(idListaDeseo);
+        return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
+
 }

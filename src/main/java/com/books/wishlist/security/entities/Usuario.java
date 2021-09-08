@@ -22,6 +22,7 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Sets;
 
@@ -54,18 +55,21 @@ public class Usuario implements Serializable{
     @ApiModelProperty(position=2, dataType="String", value="Nombre de usuario el cual debe ser unico. <br>", example="JAIDER_2103", required=true)
     private String nomUsuario;
 
+    @JsonIgnore
     @Column(name="password", nullable = false)
     @NotNull(message = "Contraseña de usuario no puede ser vacia.")
     @Size(min=10, max=300, message="Cantidad de carateres de la contraseña minimo debe ser de 10 y de maxima de 50.")
     @ApiModelProperty(position=3, dataType="String", value="Contraseña del usuario. <br>", example="**********", required=true)
     private String clave;
 
+    @JsonIgnore
     @Column(name="email", nullable = false)
     @NotNull(message = "Email del usuario no puede ser vacio.")
     @ApiModelProperty(position=4, dataType="String", value="Correo electronico del usuario el cual debe ser unico. <br>", example="jaider.serranox@hotmail.com", required=true)
     @Email(message = "Formato de email no valido.")
     private String email;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @NotNull(message = "Rol no puede ser vacio.")
     @JoinTable(name="user_rol", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "rolid"))

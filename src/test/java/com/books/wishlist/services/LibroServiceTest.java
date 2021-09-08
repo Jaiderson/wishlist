@@ -37,7 +37,7 @@ class LibroServiceTest {
 
 	@Test
 	void buscarLibroTest() {
-		this.libro = libroService.crearLibro(this.libro);
+		libroService.crearLibro(this.libro);
 		assertThat(this.libro).isNotNull();
 		assertThat(this.libro.getIdLibro()).isPositive();
 		
@@ -47,31 +47,31 @@ class LibroServiceTest {
 
 	@Test
 	void crearLibroTest() {
-		this.libro = libroService.crearLibro(this.libro);
+		libroService.crearLibro(this.libro);
 		assertThat(this.libro).isNotNull();
 		assertThat(this.libro.getIdLibro()).isPositive();
 	}
 
 	@Test
 	void modificarLibroTest() {
-		this.libro = libroService.crearLibro(this.libro);
+		libroService.crearLibro(this.libro);
 		assertThat(this.libro).isNotNull();
 		assertThat(this.libro.getIdLibro()).isPositive();
 		
 		this.libro.setTitulo("EL AMOR EN LOS TIEMPOS DEL COLERA");
-		this.libro = libroService.modificarLibro(this.libro);
+		libroService.modificarLibro(this.libro);
 		assertThat(this.libro).isNotNull();
 		assertThat(this.libro.getTitulo()).isEqualTo("EL AMOR EN LOS TIEMPOS DEL COLERA");
 	}
 
 	@Test
 	void eliminarLibroTest() {
-		this.libro = libroService.crearLibro(this.libro);
+		libroService.crearLibro(this.libro);
 		assertThat(this.libro).isNotNull();
 		assertThat(this.libro.getIdLibro()).isPositive();
 		
-		libroService.eliminarLibro(this.libro.getIdLibroApi());
-		this.libro = libroService.buscarLibroPorIdApiGoogle(this.libro.getIdLibroApi());
+		libroService.eliminarLibro(this.libro.getIdLibro());
+		libroService.buscarLibroPorIdApiGoogle(this.libro.getIdLibroApi());
 		assertThat(this.libro).isNull();
 	}
 

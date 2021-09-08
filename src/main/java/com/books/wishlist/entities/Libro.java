@@ -11,6 +11,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -66,10 +67,8 @@ public class Libro {
 	@ApiModelProperty(position = 7, dataType = "Date", value = "Fecha creacion del registro del libro.", example = "2021/08/25 15:45:33")
 	private Date fecCreacion;
 
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "libros")
-//    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-//    @ApiModelProperty(position=8, dataType="Set<Libro>")
-//	private Set<ListaDeseo> listasDeseo = Sets.newHashSet();
+	@Transient
+	private int posicion;
 
     @PrePersist
     public void prePersist() {

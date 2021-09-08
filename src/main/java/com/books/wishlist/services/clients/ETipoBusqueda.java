@@ -12,8 +12,8 @@ public enum ETipoBusqueda {
 
     private String tipoBusqueda;
 
-        private ETipoBusqueda(String tipoBusqueda) {
-            this.tipoBusqueda = tipoBusqueda;
-        }
+    private ETipoBusqueda(String tipoBusqueda) {
+        this.tipoBusqueda = tipoBusqueda;
+    }
 
 }

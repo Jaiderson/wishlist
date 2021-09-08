@@ -1,20 +1,15 @@
 package com.books.wishlist.services.implementatios;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.books.wishlist.entities.Libro;
 import com.books.wishlist.entities.ListaDeseo;
-import com.books.wishlist.entities.ListaLibroPk;
 import com.books.wishlist.repositories.IListaDeseoRep;
-import com.books.wishlist.security.controllers.RequestMensaje;
+import com.books.wishlist.security.entities.Usuario;
 import com.books.wishlist.services.IListaDeseoService;
-import com.google.common.collect.Sets;
+import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
 public class ListaDeseoServiceImpl implements IListaDeseoService {
@@ -23,125 +18,88 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 		super();
 		this.listaDeseoRep = listaDeseoRep;
 	}
-	
+
 	@Autowired
 	private IListaDeseoRep listaDeseoRep;
-	
-	@Override
-	public List<ListaDeseo> listarTodas() {
-		return listaDeseoRep.findAll();
-	}
-
-	@Override
-	public ListaDeseo buscarListaDeseo(ListaLibroPk listaLibroPk) {
-		ListaDeseo result = null;
-		List<ListaDeseo> listaDeseos = listaDeseoRep.findByListaPk(listaLibroPk);
-		if(!listaDeseos.isEmpty()) {
-			result = listaDeseos.get(0);
-		}
-		return result;
-	}
-
-	@Override
-	public ListaDeseo crearListaDeseo(ListaDeseo nuevaLista) {
-		ListaDeseo listaDeseoDb = buscarListaDeseo(nuevaLista.getListaPk());
-		if(null == listaDeseoDb) {
-			nuevaLista.setIdLista(listaDeseoRep.secuenciaListaLibro());
-			listaDeseoDb = listaDeseoRep.save(nuevaLista);
-		}
-		else {
-		    listaDeseoDb = null;
-		}
-		return listaDeseoDb;
-	}
-
-	@Override
-	public ListaDeseo modificarListaDeseo(ListaDeseo nuevaLista) {
-		//ListaDeseo listaDeseoDb = buscarListaDeseo(nuevaLista.getListaPk());
-		ListaDeseo listaDeseoDb = buscarListaDeseo(nuevaLista.getIdLista());
-		if(null != listaDeseoDb) {
-			listaDeseoDb.setLibros(Sets.newHashSet());
-			listaDeseoDb = listaDeseoRep.save(nuevaLista);
-		}
-		return listaDeseoDb;
-	}
-
-	@Override
-	public ListaDeseo eliminarListaDeseo(ListaLibroPk listaLibroPk) {
-		ListaDeseo listaDeseoDb = buscarListaDeseo(listaLibroPk);
-		if(null != listaDeseoDb) {
-			listaDeseoRep.delete(listaDeseoDb);
-		}
-		return listaDeseoDb;
-	}
-
-	@Override
-	public RequestMensaje agregarLibro(ListaLibroPk listaLibroPk, Libro libro) {
-		RequestMensaje msnRequest = new RequestMensaje();
-		msnRequest.setOk(true);
-
-		ListaDeseo listaDeseo = this.buscarListaDeseo(listaLibroPk);
-		if(null != listaDeseo) {
-			Predicate<Libro> libroPredicate =  (lib) -> lib.getIdLibroApi().equals(libro.getIdLibroApi());
-			List<Libro> libros = listaDeseo.getLibros().stream().filter(libroPredicate).collect(Collectors.toList());
-
-			if(libros.isEmpty()) {
-				listaDeseo.getLibros().add(libro);
-				listaDeseo = listaDeseoRep.save(listaDeseo);
-				listaDeseo.limpiarDatos();
-				msnRequest.setValor(listaDeseo);
-				msnRequest.setOk(true);
-			}
-			else {
-				msnRequest.setValor("Libro con id = "+libro.getIdLibroApi()+" ya esta registrado.");
-				msnRequest.setEstado(RequestMensaje.YA_EXISTE);
-				msnRequest.setOk(false);
-			}
-		}
-		else {
-			msnRequest.setValor("Lista con PK = "+listaLibroPk+" no encontrada.");
-			msnRequest.setEstado(RequestMensaje.NO_ENCONTRADO);
-			msnRequest.setOk(false);
-		}
-		return msnRequest;
-	}
-
-	@Override
-	public ListaDeseo agregarLibros(List<Libro> libros, Long id) {
-		ListaDeseo listaDeseo = null;
-		Optional<ListaDeseo> optListaDeseo = listaDeseoRep.findById(id);
-		if(optListaDeseo.isPresent()) {
-			listaDeseo = optListaDeseo.get();
-			
-		}
-		return listaDeseo;
-	}
-
-	
-	
-	
-	
-	@Override
-	public ListaDeseo eliminarLibros(List<Libro> libros, Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ListaDeseo eliminarLibros() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ListaDeseo eliminarLibro(Libro libro, Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public ListaDeseo buscarListaDeseo(Long idLista) {
 		return listaDeseoRep.findByIdLista(idLista);
+	}
+
+	@Override
+	public ListaDeseo buscarListaDeseo(ListaDeseo listaDeseo) {
+		return listaDeseoRep.buscarListaLibro(listaDeseo.getPosicionLista(), 
+				                              listaDeseo.getNomListaDeseos(), 
+				                              listaDeseo.getUsuario().getIdUsuario());
+	}
+
+	@Override
+	public MensajeRespuesta crearListaDeseo(ListaDeseo nuevaLista) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		ListaDeseo listaDeseoDb = buscarListaDeseo(nuevaLista);
+		if(null == listaDeseoDb) {
+			this.guardarListaDeseos(msnRespuesta, nuevaLista);
+			msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+		}
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.YA_EXISTE);
+			msnRespuesta.setEstado(MensajeRespuesta.YA_EXISTE);
+		}
+		return msnRespuesta;
+	}
+
+	@Override
+	public MensajeRespuesta modificarListaDeseo(ListaDeseo listaDeseos) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		ListaDeseo listaDeseoDb = buscarListaDeseo(listaDeseos.getIdLista());
+		if(null != listaDeseoDb) {
+			listaDeseos.setFecCreacion(listaDeseoDb.getFecCreacion());
+			this.guardarListaDeseos(msnRespuesta, listaDeseos);
+			msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+		}
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE);
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
+	}
+
+	@Override
+	public MensajeRespuesta eliminarListaDeseo(Long idLista) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		ListaDeseo listaDeseoDb = buscarListaDeseo(idLista);
+		if(null != listaDeseoDb) {
+			listaDeseoRep.delete(listaDeseoDb);
+			msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+		}
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE);
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
+	}
+
+	/**
+	 * Metodo usado para guardar la informacion de una lista de deseos, en caso de encontrar
+	 * inconsistencias se guardaran en el objeto de entrada <b>msnRespuesta</b>.
+	 * 
+	 * @param msnRespuesta Objeto en el cual se guardara las inconsistencias en caso de encontrar alguna.
+	 * @param listaDeseos Lista de deseos a guardar.
+	 */
+	private void guardarListaDeseos(MensajeRespuesta msnRespuesta, ListaDeseo listaDeseos) {
+		try {
+			listaDeseoRep.save(listaDeseos);
+		}
+		catch (Exception e) {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.SQL_ERROR + " "+ e.getMessage());
+			msnRespuesta.setEstado(MensajeRespuesta.SQL_ERROR);
+		}
+	}
+
+	@Override
+	public List<ListaDeseo> buscarListasDeseoPorIdUsuario(Long idUsuario) {
+		return listaDeseoRep.findByUsuario(Usuario.builder().idUsuario(idUsuario).build());
 	}
 
 }
