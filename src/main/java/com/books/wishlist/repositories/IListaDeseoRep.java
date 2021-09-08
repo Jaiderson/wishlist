@@ -34,7 +34,7 @@ public interface IListaDeseoRep extends JpaRepository<ListaDeseo, Long> {
 	 * @param idLista Identificador unico de la lista de deseos.
 	 * @return Lista de deseos o <b>null</b> si no la encuentra.
 	 */
-	public ListaDeseo findByIdLista(Long idLista);
+	public ListaDeseo findByIdLista(Long idListaDeseo);
 
 	/**
 	 * Busca una lista de deseos dado su usuario <b>usuario</b>.

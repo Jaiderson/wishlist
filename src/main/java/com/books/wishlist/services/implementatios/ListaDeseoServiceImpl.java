@@ -5,10 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.books.wishlist.entities.ItemListaLibro;
+import com.books.wishlist.entities.Libro;
 import com.books.wishlist.entities.ListaDeseo;
 import com.books.wishlist.repositories.IListaDeseoRep;
 import com.books.wishlist.security.entities.Usuario;
+import com.books.wishlist.services.ILibroService;
 import com.books.wishlist.services.IListaDeseoService;
+import com.books.wishlist.services.ItemListaLibroService;
 import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
@@ -22,9 +26,15 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 	@Autowired
 	private IListaDeseoRep listaDeseoRep;
 
+	@Autowired
+	private ItemListaLibroService itemListaLibroService;
+
+	@Autowired
+	private ILibroService libroService;
+
 	@Override
-	public ListaDeseo buscarListaDeseo(Long idLista) {
-		return listaDeseoRep.findByIdLista(idLista);
+	public ListaDeseo buscarListaDeseo(Long idListaDeseo) {
+		return listaDeseoRep.findByIdLista(idListaDeseo);
 	}
 
 	@Override
@@ -102,4 +112,41 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 		return listaDeseoRep.findByUsuario(Usuario.builder().idUsuario(idUsuario).build());
 	}
 
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public MensajeRespuesta agregarLibro(Long idListaDeseo, Libro libro) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		ListaDeseo listaDeseoDb = buscarListaDeseo(idListaDeseo);
+
+		if(null != listaDeseoDb) {
+			ItemListaLibro itemListaLibro = ItemListaLibro.builder()
+					                                      .idListaDeseo(idListaDeseo)
+					                                      .posicionLibro(libro.getPosicion())
+					                                      .idLibro(libro.getIdLibro())
+					                                      .build();
+			msnRespuesta = itemListaLibroService.crearItemListaLibro(itemListaLibro);
+		}
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE + " Lista de deseos idListaDeseo = "+idListaDeseo);
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
+	}
+
+	
+	
 }

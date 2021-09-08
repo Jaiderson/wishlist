@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.books.wishlist.entities.Libro;
 import com.books.wishlist.entities.ListaDeseo;
 import com.books.wishlist.utils.MensajeRespuesta;
 
@@ -38,6 +39,7 @@ public interface IListaDeseoService {
 	/**
 	 * Crea una lista de deseos asociada a un usuario. 
 	 * Para el nodo de usuario solo es requerido el <b>idUsuario</b>. 
+	 * 
 	 * Retorna un mensaje respuesta el cual contiene el HttpStatus de la solicitud y 
 	 * un listado de inconsistencias, si todo es <b>OK</b> este listado sera vacio.
 	 * 
@@ -47,8 +49,9 @@ public interface IListaDeseoService {
 	public MensajeRespuesta crearListaDeseo(ListaDeseo nuevaLista);
 
 	/**
-	 * Crea una lista de deseos nueva asociada a un usuario. 
-	 * Para el nodo de usuario solo es requerido el <b>idUsuario</b>. 
+	 * Modifica una lista de deseos nueva asociada a un usuario. 
+	 * Para el nodo de usuario solo es requerido el <b>idUsuario</b>.
+	 *  
 	 * Retorna un mensaje respuesta el cual contiene el HttpStatus de la solicitud y 
 	 * un listado de inconsistencias, si todo es OK este listado sera vacio.
 	 * 
@@ -69,5 +72,17 @@ public interface IListaDeseoService {
 	 * @return Mensaje de respuesta con el estado http.
 	 */
 	public MensajeRespuesta eliminarListaDeseo(Long idLista);
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public MensajeRespuesta agregarLibro(Long idListaDeseo, Libro libro);
 
 }
