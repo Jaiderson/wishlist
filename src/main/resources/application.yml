@@ -1,5 +1,6 @@
 #Application Configuration TestIngresoMeLi 
 server:
+#  contextPath: /wishlist
   port: 8091
   error:
     include-message: always
@@ -13,16 +14,16 @@ spring:
   # ===============================
   # HEROKU DB
   # ===============================
-#  datasource:
-#    username: lajqrlrryrncfa
-#    password: 43bd9773a0ef94ea1c33d3a751a96b24e453b278052948bba8541d15b32a941a
-#    url: jdbc:postgresql://ec2-52-71-231-37.compute-1.amazonaws.com:5432/ddvias9p8l3m4p    
+  datasource:
+    username: lajqrlrryrncfa
+    password: 43bd9773a0ef94ea1c33d3a751a96b24e453b278052948bba8541d15b32a941a
+    url: jdbc:postgresql://ec2-52-71-231-37.compute-1.amazonaws.com:5432/ddvias9p8l3m4p    
     
 # BD LOCAL
-  datasource:
-    username: postgres
-    password: Medellin123+-*
-    url: jdbc:postgresql://localhost:5432/wishlistDb
+#  datasource:
+#    username: postgres
+#    password: Medellin123+-*
+#    url: jdbc:postgresql://localhost:5432/wishlistDb
 
   sql:
     init:

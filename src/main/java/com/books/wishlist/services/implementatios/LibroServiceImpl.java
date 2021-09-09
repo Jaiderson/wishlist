@@ -41,8 +41,9 @@ public class LibroServiceImpl implements ILibroService {
 		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
 		Libro libroBd = buscarLibroPorIdApiGoogle(nuevoLibro.getIdLibroApi());
 		if(null == libroBd) {
-			 this.guardarLiro(msnRespuesta, nuevoLibro);
-			 msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+		    if(this.guardarLiro(msnRespuesta, nuevoLibro)) {
+		        msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+		    }
 		}
 		else {
 			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.YA_EXISTE);
@@ -58,8 +59,9 @@ public class LibroServiceImpl implements ILibroService {
 		if(null != libroBd) {
 			 libro.setIdLibro(libroBd.getIdLibro());
 			 libro.setFecCreacion(libroBd.getFecCreacion());
-			 this.guardarLiro(msnRespuesta, libro);
-			 msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+			if(this.guardarLiro(msnRespuesta, libro)) {
+			    msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+			}
 		}
 		else {
 			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE);
@@ -90,14 +92,18 @@ public class LibroServiceImpl implements ILibroService {
 	 * @param msnRespuesta Objeto en el cual se guardara las inconsistencias en caso de encontrar alguna.
 	 * @param libro Libro a guardar.
 	 */
-	private void guardarLiro(MensajeRespuesta msnRespuesta, Libro libro) {
+	private boolean guardarLiro(MensajeRespuesta msnRespuesta, Libro libro) {
+	    boolean isOk = false;
 		try {
 			libroRep.save(libro);
+			isOk = true;
 		}
 		catch (Exception e) {
 			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.SQL_ERROR + " "+ e.getMessage());
 			msnRespuesta.setEstado(MensajeRespuesta.SQL_ERROR);
+			isOk = false;
 		}
+		return isOk;
 	}
 
 }

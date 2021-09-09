@@ -30,7 +30,7 @@ public class LibroController {
 	@Autowired
 	private ILibroService listaDeseoService;
 
-    @GetMapping(value = "/id/{idLibro}")
+    @GetMapping(value = "/il/{idLibro}")
     public ResponseEntity<Libro> buscarLibroPorIdLibro(
     		@PathVariable(name="idLibro", required = true) Long idLibro){
         Libro libro = listaDeseoService.buscarLibroPorIdLibro(idLibro);
@@ -40,7 +40,7 @@ public class LibroController {
         return ResponseEntity.ok(libro); 
     }
 
-    @GetMapping(value = "/api/{idLibroApi}")
+    @GetMapping(value = "/iag/{idLibroApi}")
     public ResponseEntity<Libro> buscarLibroPorIdApiGoogle(
     		@PathVariable(name="idLibroApi", required = true) String idLibroApi){
         Libro libro = listaDeseoService.buscarLibroPorIdApiGoogle(idLibroApi);

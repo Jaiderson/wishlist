@@ -83,6 +83,6 @@ public interface IListaDeseoService {
 	
 	
 	
-	public MensajeRespuesta agregarLibro(Long idListaDeseo, Libro libro);
+	public MensajeRespuesta agregarLibroListaDeseos(Long idListaDeseo, Libro libro);
 
 }

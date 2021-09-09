@@ -24,9 +24,7 @@ public class VolumeInfoDto {
     public String formatAuthors() {
     	StringBuilder formatAuthors = new StringBuilder("");
     	if(null != this.authors && !this.authors.isEmpty()) {
-    		this.authors.stream().forEach((author) -> {
-    			formatAuthors.append(author).append("|");
-    		});
+    		this.authors.stream().forEach(author -> formatAuthors.append(author).append("|"));
     	}
     	return formatAuthors.toString();
     }

@@ -26,8 +26,9 @@ public class ItemListaLibroServiceImpl implements ItemListaLibroService {
 		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
 		ItemListaLibro itemBd = buscarItemListaLibro(itemListaLibro);
 		if(null == itemBd) {
-			this.guardarItemListaLiro(msnRespuesta, itemListaLibro);
-			msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+			if(guardarItemListaLiro(msnRespuesta, itemListaLibro)) {
+			    msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+			}
 		}
 		else {
 			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.YA_EXISTE);
@@ -42,8 +43,9 @@ public class ItemListaLibroServiceImpl implements ItemListaLibroService {
 		ItemListaLibro itemBd = buscarItemListaLibro(itemListaLibro);
 		if(null != itemBd) {
 			itemListaLibro.setIdItemListaLibro(itemBd.getIdItemListaLibro());
-			this.guardarItemListaLiro(msnRespuesta, itemListaLibro);
-			msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+			if(guardarItemListaLiro(msnRespuesta, itemListaLibro)) {
+			    msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+			}
 		}
 		else {
 			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE);
@@ -74,14 +76,18 @@ public class ItemListaLibroServiceImpl implements ItemListaLibroService {
 	 * @param msnRespuesta Objeto en el cual se guardara las inconsistencias en caso de encontrar alguna.
 	 * @param libro Libro a guardar.
 	 */
-	private void guardarItemListaLiro(MensajeRespuesta msnRespuesta, ItemListaLibro itemListaLibro) {
+	private boolean guardarItemListaLiro(MensajeRespuesta msnRespuesta, ItemListaLibro itemListaLibro) {
+	    boolean isOk = false;
 		try {
 			itemListaLibroRep.save(itemListaLibro);
+			isOk = true;
 		}
 		catch (Exception e) {
 			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.SQL_ERROR + " "+ e.getMessage());
 			msnRespuesta.setEstado(MensajeRespuesta.SQL_ERROR);
+			isOk = false;
 		}
+		return isOk;
 	}
 
 }

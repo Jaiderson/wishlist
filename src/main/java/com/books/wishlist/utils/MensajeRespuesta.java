@@ -27,7 +27,7 @@ public class MensajeRespuesta {
 	public HttpStatus generarEstadoHttp() {
 		HttpStatus result = null; 
 		
-		if(this.estado.equals(YA_EXISTE) || estado.equals(YA_EXISTE)) {
+		if(this.estado.equals(YA_EXISTE)) {
 			result = HttpStatus.CONFLICT;
 		}
 		else if(this.estado.equals(SQL_ERROR)) {
