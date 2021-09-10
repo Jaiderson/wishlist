@@ -14,11 +14,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.books.wishlist.security.entities.ERol;
-import com.books.wishlist.security.entities.Rol;
-import com.books.wishlist.security.repositories.IRolRep;
-import com.books.wishlist.security.services.IRolService;
-import com.books.wishlist.security.services.implementations.RolServiceImpl;
+import com.books.wishlist.entities.ERol;
+import com.books.wishlist.entities.Rol;
+import com.books.wishlist.repositories.IRolRep;
+import com.books.wishlist.services.implementatios.RolServiceImpl;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)

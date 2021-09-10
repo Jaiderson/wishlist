@@ -1,4 +1,4 @@
-package com.books.wishlist.security.repositories;
+package com.books.wishlist.repositories;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.books.wishlist.security.entities.ERol;
-import com.books.wishlist.security.entities.Rol;
+import com.books.wishlist.entities.ERol;
+import com.books.wishlist.entities.Rol;
 
 @Repository
 public interface IRolRep extends JpaRepository<Rol, Long> {

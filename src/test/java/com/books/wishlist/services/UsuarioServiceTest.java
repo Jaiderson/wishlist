@@ -10,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.books.wishlist.security.entities.Usuario;
-import com.books.wishlist.security.repositories.IUsuarioRep;
-import com.books.wishlist.security.services.IUsuarioService;
-import com.books.wishlist.security.services.implementations.UsuarioServiceImpl;
+import com.books.wishlist.entities.Usuario;
+import com.books.wishlist.repositories.IUsuarioRep;
+import com.books.wishlist.services.implementatios.UsuarioServiceImpl;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)

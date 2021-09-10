@@ -1,4 +1,4 @@
-package com.books.wishlist.security.entities;
+package com.books.wishlist.entities;
 
 import lombok.Getter;
 

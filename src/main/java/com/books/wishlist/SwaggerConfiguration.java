@@ -23,7 +23,7 @@ public class SwaggerConfiguration {
 	
 	@Bean
 	public String nombreAplicacion() {
-		return "API Ingreso MeLi";
+		return "API Lista de Deseos MeLi";
 	}
 
 }

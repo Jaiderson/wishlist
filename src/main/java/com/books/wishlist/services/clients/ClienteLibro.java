@@ -32,6 +32,7 @@ public class ClienteLibro {
 	 */
     public RespuestaLibroDto buscarLibros(String nombreLibro, ETipoBusqueda tipoBusqueda, String parametroBusqueda) {
        nombreLibro = nombreLibro.trim().replaceFirst(" ", "+");
+       nombreLibro += nombreLibro+"+";
        parametroBusqueda = parametroBusqueda.trim().replaceFirst(" ", "+");
 
        RestTemplate restTemplate = new RestTemplate();

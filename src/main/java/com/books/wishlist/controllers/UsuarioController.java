@@ -1,4 +1,4 @@
-package com.books.wishlist.security.controllers;
+package com.books.wishlist.controllers;
 
 import javax.validation.Valid;
 
@@ -21,17 +21,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.books.wishlist.security.dto.CambioClaveUsuarioDto;
-import com.books.wishlist.security.dto.LoginUsuarioDto;
-import com.books.wishlist.security.dto.NuevoUsuarioDto;
-import com.books.wishlist.security.dto.TokenDto;
-import com.books.wishlist.security.entities.Usuario;
+import com.books.wishlist.dto.CambioClaveUsuarioDto;
+import com.books.wishlist.dto.LoginUsuarioDto;
+import com.books.wishlist.dto.NuevoUsuarioDto;
+import com.books.wishlist.dto.TokenDto;
+import com.books.wishlist.entities.Usuario;
 import com.books.wishlist.security.jwtokens.ProveedorToken;
-import com.books.wishlist.security.services.IUsuarioService;
+import com.books.wishlist.services.IUsuarioService;
 import com.books.wishlist.utils.MensajeError;
 import com.books.wishlist.utils.MensajeRespuesta;
 
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Controller
 @RequestMapping(value = "/usuarios")
@@ -50,8 +53,15 @@ public class UsuarioController {
 	private ProveedorToken proveedorToken;
 
 	@PostMapping
+    @ApiOperation(value = "Permite crear un usuario nuevo.")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Usuario ya existe."),
+        @ApiResponse(code = 201, message = "Usuario creado correctamente."),
+        @ApiResponse(code = 401, message = "Acceso al recurso no autorizado."),
+        @ApiResponse(code = 400, message = "Informacion del usuario incompleta.")
+    })
 	public ResponseEntity<MensajeRespuesta> crearUsuario(
-			@ApiParam(name="usuario", value="Usuario a registrar.", required = true)
+			@ApiParam(name="nuevoUsuario", value="Usuario a registrar.", required = true)
 			@Valid @RequestBody NuevoUsuarioDto nuevoUsuario, BindingResult result){
 
 		Usuario usuario = new Usuario(nuevoUsuario.getNomUsuario(), nuevoUsuario.getPassword(), 
@@ -63,6 +73,14 @@ public class UsuarioController {
 	}
 
 	@PutMapping
+    @ApiOperation(value = "Permite modificar un la informacion de un usuario existente.")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Usuario actualizado correctamente."),
+        @ApiResponse(code = 204, message = "Usuario actualizado correctamente."),
+        @ApiResponse(code = 401, message = "Acceso al recurso no autorizado."),
+        @ApiResponse(code = 400, message = "Informacion del usuario incompleta."),
+        @ApiResponse(code = 404, message = "Usuario a modificar no existe.")        
+    })
 	public ResponseEntity<MensajeRespuesta> modificarUsuario(
 			@ApiParam(name="usuario", value="Usuario a registrar.", required = true)
 			@Valid @RequestBody NuevoUsuarioDto nuevoUsuario, BindingResult result){
@@ -76,9 +94,18 @@ public class UsuarioController {
 	}
 
 	@PutMapping(value = "/{idUsuario}")
+    @ApiOperation(value = "Permite modificar la contraseña de un usuario existente.")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Usuario actualizado correctamente."),
+        @ApiResponse(code = 204, message = "Usuario actualizado correctamente."),
+        @ApiResponse(code = 401, message = "Acceso al recurso no autorizado."),
+        @ApiResponse(code = 400, message = "Informacion del usuario incompleta."),
+        @ApiResponse(code = 404, message = "Usuario a modificar no existe.")        
+    })
 	public ResponseEntity<MensajeRespuesta> cambiarClaveUsuario(
+			@ApiParam(name="idUsuario", value="Id del usuario a cambiar clave.", required = true)
 			@PathVariable(name="idUsuario", required = true) Long idUsuario,
-			@ApiParam(name="usuario", value="Usuario a registrar.", required = true)
+			@ApiParam(name="usuario", value="Usuario a cambiar clave.", required = true)
 			@Valid @RequestBody CambioClaveUsuarioDto usuario, BindingResult result){
 
 		String nuevaClave = passwordEncoder.encode(usuario.getPassword());
@@ -87,7 +114,14 @@ public class UsuarioController {
 	}
 
 	@DeleteMapping(value = "/{idUsuario}")
+    @ApiOperation(value = "Permite eliminar un usuario.")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Usuario eliminado correctamente."),
+        @ApiResponse(code = 401, message = "Acceso al recurso no autorizado."),
+        @ApiResponse(code = 404, message = "Usuario no encontrado")
+    })
 	public ResponseEntity<MensajeRespuesta> eliminarUsuario(
+			@ApiParam(name="idUsuario", value="Id del usuario a eliminar.", required = true)
 			@PathVariable(name="idUsuario", required = true) Long idUsuario){
 
 		MensajeRespuesta msnRespuesta = usuarioService.eliminarUsuario(idUsuario);
@@ -95,7 +129,15 @@ public class UsuarioController {
 	}
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginUsuarioDto loginUsuario, BindingResult result){
+    @ApiOperation(value = "Permite generar un token de autenticacion valido por una hora.")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Token generado."),
+        @ApiResponse(code = 401, message = "Acceso al recurso no autorizado."),
+        @ApiResponse(code = 400, message = "Informacion del usuario incompleta o incorrecta.")
+    })
+    public ResponseEntity<TokenDto> login(
+    	   @ApiParam(name="loginUsuario", value="Credenciales de autenticacion para obtener token.", required = true)
+    	   @Valid @RequestBody LoginUsuarioDto loginUsuario, BindingResult result){
         if(result.hasErrors()) {
 			MensajeError msnError = new MensajeError(MensajeError.LOGIN);
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));

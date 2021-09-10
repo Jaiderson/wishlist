@@ -17,20 +17,18 @@ import com.books.wishlist.dto.LibroNuevoDto;
 import com.books.wishlist.entities.ItemListaLibro;
 import com.books.wishlist.entities.Libro;
 import com.books.wishlist.entities.ListaDeseo;
+import com.books.wishlist.entities.Rol;
+import com.books.wishlist.entities.Usuario;
 import com.books.wishlist.repositories.ILibroRep;
 import com.books.wishlist.repositories.IListaDeseoRep;
+import com.books.wishlist.repositories.IRolRep;
+import com.books.wishlist.repositories.IUsuarioRep;
 import com.books.wishlist.repositories.ItemListaLibroRep;
-import com.books.wishlist.security.entities.Rol;
-import com.books.wishlist.security.entities.Usuario;
-import com.books.wishlist.security.repositories.IRolRep;
-import com.books.wishlist.security.repositories.IUsuarioRep;
-import com.books.wishlist.security.services.IRolService;
-import com.books.wishlist.security.services.IUsuarioService;
-import com.books.wishlist.security.services.implementations.RolServiceImpl;
-import com.books.wishlist.security.services.implementations.UsuarioServiceImpl;
 import com.books.wishlist.services.implementatios.ItemListaLibroServiceImpl;
 import com.books.wishlist.services.implementatios.LibroServiceImpl;
 import com.books.wishlist.services.implementatios.ListaDeseoServiceImpl;
+import com.books.wishlist.services.implementatios.RolServiceImpl;
+import com.books.wishlist.services.implementatios.UsuarioServiceImpl;
 import com.books.wishlist.utils.MensajeRespuesta;
 
 @DataJpaTest
@@ -67,7 +65,7 @@ class ListaDeseoServiceTest {
         itemListaLibroService = new ItemListaLibroServiceImpl(itemListaLibroRep);
         listaDeseoService = new ListaDeseoServiceImpl(libroService, listaDeseoRep, itemListaLibroService);
 
-        this.rol = ProveedorObjetos.getRol();
+        this.rol = ProveedorObjetos.getRolUno();
         this.usuario = ProveedorObjetos.getUsuario();
 		this.listaDeseo = ProveedorObjetos.getListaDeseos(this.usuario);
 

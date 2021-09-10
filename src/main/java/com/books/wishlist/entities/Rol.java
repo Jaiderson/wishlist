@@ -1,4 +1,4 @@
-package com.books.wishlist.security.entities;
+package com.books.wishlist.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,13 +28,15 @@ public class Rol {
     @Id
     @Column(name="rolid")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(position = 1, dataType = "Long", value = "Identificador unico del rol del usuario.<br>", example = "100", required = true)
+    @ApiModelProperty(position = 1, dataType = "Long", value = "Identificador unico del rol del usuario.<br>", 
+                                                       example = "100", required = true)
     private Long idRol;
     
     @Column(name="rolname", unique = true)
     @NotNull(message = "El rol de usuario no puede ser vacio.")
     @Enumerated(EnumType.STRING)
-    @ApiModelProperty(position = 2, dataType = "String", value = "Nombre del rol de usuario. <br>", example = "USER", required = true)
+    @ApiModelProperty(position = 2, dataType = "String", value = "Nombre del rol de usuario. <br>", 
+                                                         example = "USER", required = true)
     private ERol nombre;
 
     @Column(name="description")

@@ -1,5 +1,5 @@
 # wishlist
-Desafío de la codificación que consiste en la implementación de una aplicación web que expone una API REST- ful para crear listas de deseos de libros para diferentes usuarios
+Desafío de la codificación que consiste en la implementación de una aplicación web que expone una API REST- ful para crear listas de deseos de libros para diferentes usuarios.
 
 ## Estructura del proyecto
 ```
@@ -8,43 +8,93 @@ wishlist-spring-boot-jwt/
  ├── src/main/java/books
  │   └── wishlist
  │       ├── configuration
- │       │   └── SwaggerConfig.java
+ │       │   └── SwaggerConfiguration.java
  │       │
  │       ├── controller
- │       │   └── UserController.java
+ │       │   └── RolController.java
+ │       │   └── UsuarioController.java
+ │       │   └── LibroController.java
+ │       │   └── ListaDeseoController.java
  │       │
  │       ├── dto
- │       │   ├── UserDataDTO.java
- │       │   └── UserResponseDTO.java
+ │       │   └── ItemDto.java
+ │       │   └── TokenDto.java
+ │       │   └── LibroNuevoDto.java
+ │       │   └── VolumeInfoDto.java
+ │       │   └── LoginUsuarioDto.java
+ │       │   └── NuevoUsuarioDto.java
+ │       │   └── RespuestaLibroDto.java
+ │       │   └── LibroExistenteDto.java
+ │       │   └── CambioClaveUsuarioDto.java
+ │       │   └── BusquedaParametricaDto.java
  │       │
- │       ├── exception
- │       │   ├── CustomException.java
- │       │   └── GlobalExceptionController.java
+ │       ├── entities
+ │       │   └── Rol.java
+ │       │   └── ERol.java
+ │       │   └── Libro.java
+ │       │   └── Usuario.java
+ │       │   └── ListaDeseo.java
+ │       │   └── ItemListaLibro.java
  │       │
- │       ├── model
- │       │   ├── Role.java
- │       │   └── User.java
- │       │
- │       ├── repository
- │       │   └── UserRepository.java
+ │       ├── repositories
+ │       │   └── IRolRep.java
+ │       │   └── ILibroRep.java
+ │       │   └── IUsuarioRep.java
+ │       │   └── IListaDeseoRep.java
+ │       │   └── ItemListaLibroRep.java
  │       │
  │       ├── security
- │       │   ├── JwtTokenFilter.java
- │       │   ├── JwtTokenFilterConfigurer.java
- │       │   ├── JwtTokenProvider.java
- │       │   ├── MyUserDetails.java
- │       │   └── WebSecurityConfig.java
+ │       │   └── SecurityConguration.java
+ │       │   ├── jwtokens
+ │       │       └── PuntoEntrada.java
+ │       │       └── ValidarToken.java
+ │       │       └── ProveedorToken.java
+ │       │       └── UsuarioAutorizado.java 
  │       │
- │       ├── service
- │       │   └── UserService.java
+ │       ├── services
+ │       │   └── IRolServie.java
+ │       │   └── ILibroServie.java
+ │       │   └── IUsuarioServie.java
+ │       │   └── IListaDeseoServie.java
+ │       │   └── ItemListaLibroServie.java
+ │       │   ├── clients
+ │       │       └── ClienteLibro.java
+ │       │       └── ETipoBusqueda.java
+ │       │   ├── implemtations
+ │       │       └── RolServieImpl.java
+ │       │       └── LibroServieImpl.java
+ │       │       └── UsuarioServieImpl.java
+ │       │       └── ListaDeseoServieImpl.java
+ │       │       └── UserDetailsServiceImpl.java
+ │       │       └── ItemListaLibroServieImpl.java
  │       │
- │       └── JwtAuthServiceApp.java
+ │       ├── utils
+ │       │   ├── Dato.java
+ │       │   └── Util.java
+ │       │   └── Consola.java
+ │       │   └── MensajeError.java
+ │       │   └── MensajeRespuesta.java 
+ │       │
+ │       └── WishlistApplication.java
  │
  ├── src/main/resources/
  │   ├── sql
- |   |    └── roles.sql
- │   └── application.yml
+ │   │    └── roles.sql
  │
+ ├── src/test/java/
+ │   └── wishlist
+ │       ├── services
+ │       │   └── RolServiceTest.java
+ │       │   └── LibroServiceTest.java
+ │       │   └── ProveedorObjetos.java
+ │       │   └── UsuarioServiceTest.java
+ │       │   └── ListaDeseoServiceTest.java
+ │       │   
+ │       WishlistApplicationTests
+ │       │   
+ │       │   
+ ├──
+ ├── Dokerfile
  ├── .gitignore
  ├── LICENSE
  ├── mvnw/mvnw.cmd

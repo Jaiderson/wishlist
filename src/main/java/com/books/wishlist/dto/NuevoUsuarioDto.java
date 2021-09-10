@@ -1,4 +1,4 @@
-package com.books.wishlist.security.dto;
+package com.books.wishlist.dto;
 
 import java.util.Set;
 

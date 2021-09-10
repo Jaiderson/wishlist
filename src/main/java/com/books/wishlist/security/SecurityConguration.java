@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.books.wishlist.security.jwtokens.PuntoEntrada;
 import com.books.wishlist.security.jwtokens.ValidarToken;
-import com.books.wishlist.security.services.implementations.UserDetailsServiceImpl;
+import com.books.wishlist.services.implementatios.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -59,7 +59,8 @@ public class SecurityConguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/usuarios/**").permitAll()  //Permitir todo = .antMatchers("/*/**").permitAll()
+                //.antMatchers("/roles/**","/usuarios/**","/swagger-ui.html/**").permitAll()
+                .antMatchers("/*/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(puntoEntrada)

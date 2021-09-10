@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @RunWith(JUnitPlatform.class)
-@SelectPackages(value = {"com.books.wishlist.services"})
+@SelectPackages(value = {"com.books.wishlist.services","com.books.wishlist.controllers"})
 class WishlistApplicationTests {
 
 	@Test

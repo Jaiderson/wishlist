@@ -13,7 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.books.wishlist.security.services.implementations.UserDetailsServiceImpl;
+import com.books.wishlist.services.implementatios.UserDetailsServiceImpl;
 import com.books.wishlist.utils.Consola;
 
 public class ValidarToken extends OncePerRequestFilter{

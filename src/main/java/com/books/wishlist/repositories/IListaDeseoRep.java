@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.books.wishlist.entities.ListaDeseo;
-import com.books.wishlist.security.entities.Usuario;
+import com.books.wishlist.entities.Usuario;
 
 @Repository
 public interface IListaDeseoRep extends JpaRepository<ListaDeseo, Long> {

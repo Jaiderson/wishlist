@@ -1,4 +1,4 @@
-package com.books.wishlist.security.services.implementations;
+package com.books.wishlist.services.implementatios;
 
 import java.util.Optional;
 
@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.books.wishlist.security.entities.Usuario;
-import com.books.wishlist.security.entities.UsuarioAutorizado;
-import com.books.wishlist.security.services.IUsuarioService;
+import com.books.wishlist.entities.Usuario;
+import com.books.wishlist.security.jwtokens.UsuarioAutorizado;
+import com.books.wishlist.services.IUsuarioService;
 
 @Service
 public class UserDetailsServiceImpl  implements UserDetailsService {

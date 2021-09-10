@@ -16,4 +16,25 @@ public enum ETipoBusqueda {
         this.tipoBusqueda = tipoBusqueda;
     }
 
+    public static ETipoBusqueda getTipoBusqueda(String tipo) {
+    	ETipoBusqueda result = null;
+    	
+    	switch (tipo) {
+		case "AUTOR":
+			result = ETipoBusqueda.AUTOR;
+			break;
+		case "TITULO":
+			result = ETipoBusqueda.TITULO;
+			break;
+		case "EDITOR":
+			result = ETipoBusqueda.EDITOR;
+			break;
+		case "CATEGORIA":
+			result = ETipoBusqueda.CATEGORIA;
+			break;
+		default:
+			break;
+		}
+    	return result;
+    }
 }

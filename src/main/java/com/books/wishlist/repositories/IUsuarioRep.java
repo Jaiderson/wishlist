@@ -1,4 +1,4 @@
-package com.books.wishlist.security.repositories;
+package com.books.wishlist.repositories;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.books.wishlist.security.entities.Usuario;
+import com.books.wishlist.entities.Usuario;
 
 @Repository
 public interface IUsuarioRep  extends JpaRepository<Usuario, Long> {

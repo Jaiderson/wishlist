@@ -1,4 +1,4 @@
-package com.books.wishlist.security.services.implementations;
+package com.books.wishlist.services.implementatios;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.books.wishlist.security.entities.Usuario;
-import com.books.wishlist.security.repositories.IUsuarioRep;
-import com.books.wishlist.security.services.IUsuarioService;
+import com.books.wishlist.entities.Usuario;
+import com.books.wishlist.repositories.IUsuarioRep;
+import com.books.wishlist.services.IUsuarioService;
 import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service

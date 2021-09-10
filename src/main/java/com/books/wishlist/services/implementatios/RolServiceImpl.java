@@ -1,4 +1,4 @@
-package com.books.wishlist.security.services.implementations;
+package com.books.wishlist.services.implementatios;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.books.wishlist.security.entities.ERol;
-import com.books.wishlist.security.entities.Rol;
-import com.books.wishlist.security.repositories.IRolRep;
-import com.books.wishlist.security.services.IRolService;
+import com.books.wishlist.entities.ERol;
+import com.books.wishlist.entities.Rol;
+import com.books.wishlist.repositories.IRolRep;
+import com.books.wishlist.services.IRolService;
 import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
