@@ -5,7 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
@@ -19,6 +22,7 @@ import com.books.wishlist.security.services.implementations.RolServiceImpl;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@TestMethodOrder(OrderAnnotation.class)
 class RolServiceTest {
 
 	@Autowired
@@ -32,38 +36,42 @@ class RolServiceTest {
 	}
 
 	@Test
+	@Order(3)
 	void buscarRolTest() {
 		Rol rol = new Rol(ERol.OTHER_TEST, null);
-		rol = rolService.crearRol(rol);
+		rolService.crearRol(rol);
 		List<Rol> roles = rolService.consultarRoles();
 		assertThat(roles).isNotNull().isNotEmpty();
 	}
 
 	@Test
+	@Order(1)
 	void crearRolTest() {
 		Rol rol = new Rol(ERol.OTHER_TEST, null);
-		rol = rolService.crearRol(rol);
+		rolService.crearRol(rol);
 		assertThat(rol).isNotNull();
 		assertThat(rol.getIdRol()).isPositive();
 	}
 
 	@Test
+	@Order(2)
 	void modificarRolTest() {
 		Rol rol = new Rol(ERol.USER_TEST, null);
-		rol = rolService.crearRol(rol);
+		rolService.crearRol(rol);
 		assertThat(rol).isNotNull();
 		assertThat(rol.getIdRol()).isPositive();
 		
 		rol.setDescripcion("Nueva descripcion del usuario");
-		rol = rolService.modificarRol(rol);
+		rolService.modificarRol(rol);
 		assertThat(rol).isNotNull();
 		assertThat(rol.getDescripcion()).isEqualTo("Nueva descripcion del usuario");
 	}
 
 	@Test
+	@Order(4)
 	void eliminarRolTest() {
 		Rol rol = new Rol(ERol.ADMIN_TEST, null);
-		rol = rolService.crearRol(rol);
+		rolService.crearRol(rol);
 		assertThat(rol).isNotNull();
 		assertThat(rol.getIdRol()).isPositive();
 		

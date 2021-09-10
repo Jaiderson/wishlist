@@ -11,8 +11,9 @@ import com.google.common.collect.Sets;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
-@Getter @Setter
+@Getter @Setter @ToString
 public class NuevoUsuarioDto {
 
     @NotBlank(message = "Nombre de usuario no debe ser vacio.")

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.books.wishlist.security.entities.Usuario;
 import com.books.wishlist.security.repositories.IUsuarioRep;
 import com.books.wishlist.security.services.IUsuarioService;
+import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
 @Transactional
@@ -49,41 +50,93 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	@Override
-	public Usuario crearUsuario(Usuario usuario) {
-		return usuarioRep.save(usuario);
-	}
-
-	@Override
-	public Usuario modificarUsuario(Usuario usuario) {
-		Optional<Usuario> actUsuario = usuarioRep.findByNomUsuario(usuario.getNomUsuario());
-		if(!actUsuario.isPresent()) {
-			return null;
+	public MensajeRespuesta crearUsuario(Usuario usuario) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		boolean existe = usuarioRep.existsByNomUsuario(usuario.getNombre());
+		if(!existe) {
+		    if(this.guardarUsuario(msnRespuesta, usuario)) {
+		        msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+		    }
 		}
-		return usuarioRep.save(usuario);
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.YA_EXISTE + usuario.getNombre());
+			msnRespuesta.setEstado(MensajeRespuesta.YA_EXISTE);
+		}
+		return msnRespuesta;
 	}
 
 	@Override
-	public Usuario modificarClaveUsuario(Long idUsuario, String nuevaClave) {
+	public MensajeRespuesta modificarUsuario(Usuario usuario) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		boolean existe = usuarioRep.existsByNomUsuario(usuario.getNombre());
+		if(existe) {
+		    if(this.guardarUsuario(msnRespuesta, usuario)) {
+		        msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+		    }
+		}
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE + usuario.getNombre());
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
+	}
+
+	@Override
+	public MensajeRespuesta modificarClaveUsuario(Long idUsuario, String nuevaClave) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
 		Usuario actUsuario = usuarioRep.findByIdUsuario(idUsuario);
-		if(null == actUsuario) {
-			return actUsuario;
+		if(null != actUsuario) {
+			actUsuario.setClave(nuevaClave);
+		    if(this.guardarUsuario(msnRespuesta, actUsuario)) {
+		        msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+		    }
 		}
-		return usuarioRep.save(actUsuario);	
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE +"idUsuario = "+idUsuario);
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
 	}
 
 	@Override
-	public Usuario eliminarUsuario(Long idUsuario) {
-		Usuario eliUsuario = buscarUsuarioPorId(idUsuario);
-		if(null == eliUsuario) {
-			return eliUsuario;
+	public MensajeRespuesta eliminarUsuario(Long idUsuario) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		Usuario eliUsuario = usuarioRep.findByIdUsuario(idUsuario);
+		if(null != eliUsuario) {
+			usuarioRep.delete(eliUsuario);
+		    msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
 		}
-		usuarioRep.delete(eliUsuario);
-		return eliUsuario;
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE +"idUsuario = "+idUsuario);
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
 	}
 
 	@Override
 	public List<Usuario> consultarUsuarios(String nombre) {
 		return usuarioRep.consultarUsuarios(nombre);
+	}
+
+	/**
+	 * Metodo usado para guardar la informacion de un nuevo usuario, en caso de encontrar
+	 * inconsistencias se guardaran en el objeto de entrada <b>msnRespuesta</b>.
+	 * 
+	 * @param msnRespuesta Objeto en el cual se guardara las inconsistencias en caso de encontrar alguna.
+	 * @param usuario Usuario a guardar.
+	 */
+	private boolean guardarUsuario(MensajeRespuesta msnRespuesta, Usuario usuario) {
+	    boolean isOk = false;
+		try {
+			usuarioRep.save(usuario);
+			isOk = true;
+		}
+		catch (Exception e) {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.SQL_ERROR + " "+ e.getMessage());
+			msnRespuesta.setEstado(MensajeRespuesta.SQL_ERROR);
+			isOk = false;
+		}
+		return isOk;
 	}
 
 }

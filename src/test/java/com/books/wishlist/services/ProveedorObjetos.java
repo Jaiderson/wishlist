@@ -1,12 +1,13 @@
 package com.books.wishlist.services;
 
-import java.util.Set;
+import java.util.List;
 
 import com.books.wishlist.entities.Libro;
+import com.books.wishlist.entities.ListaDeseo;
 import com.books.wishlist.security.entities.ERol;
 import com.books.wishlist.security.entities.Rol;
 import com.books.wishlist.security.entities.Usuario;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 
 public class ProveedorObjetos {
 
@@ -36,11 +37,18 @@ public class ProveedorObjetos {
                               .build();
     }
 
-    public static Set<Libro> getLibros(){
-        Set<Libro> libros = Sets.newHashSet();
+    public static List<Libro> getLibros(){
+        List<Libro> libros = Lists.newArrayList();
         libros.add(getLibroUno());
         libros.add(getLibroDos());
         return libros;
+    }
+
+    public static ListaDeseo getListaDeseos(Usuario usuario) {
+    	return ListaDeseo.builder().usuario(usuario)
+                .posicionLista(1)
+                .nomListaDeseos("Lista libros literatura colombiana")
+                .build();
     }
 
 }

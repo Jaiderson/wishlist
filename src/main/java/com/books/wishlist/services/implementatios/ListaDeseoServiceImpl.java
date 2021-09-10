@@ -23,9 +23,13 @@ import com.books.wishlist.utils.MensajeRespuesta;
 @Transactional
 public class ListaDeseoServiceImpl implements IListaDeseoService {
 
-	public ListaDeseoServiceImpl(IListaDeseoRep listaDeseoRep) {
+	public ListaDeseoServiceImpl(ILibroService libroService, 
+			                     IListaDeseoRep listaDeseoRep,
+			                     ItemListaLibroService itemListaLibroService) {
 		super();
 		this.listaDeseoRep = listaDeseoRep;
+		this.libroService  = libroService;
+		this.itemListaLibroService = itemListaLibroService;
 	}
 
 	@Autowired
@@ -182,7 +186,7 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 	}
 
 	@Override
-	public MensajeRespuesta agregarLibroListaDeseos(LibroNuevoDto libroNuevo) {
+	public MensajeRespuesta agregarLibroListaDeseosCreaLibro(LibroNuevoDto libroNuevo) {
 		MensajeRespuesta msnRespuesta = null;
 		LibroExistenteDto libroExistente = new LibroExistenteDto(libroNuevo.getIdLibro(), 
 																 libroNuevo.getIdListaDeseo(), 

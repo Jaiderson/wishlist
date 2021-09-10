@@ -21,8 +21,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.books.wishlist.security.entities.Rol;
 import com.books.wishlist.security.services.IRolService;
-import com.books.wishlist.services.clients.ClienteLibro;
 import com.books.wishlist.utils.MensajeError;
+import com.books.wishlist.utils.MensajeRespuesta;
 
 import io.swagger.annotations.ApiParam;
 
@@ -35,9 +35,6 @@ public class RolController {
 
 	@GetMapping
 	public ResponseEntity<List<Rol>> listarRoles(){
-		ClienteLibro cliente = new ClienteLibro();
-		cliente.buscarLibros("  harry poter ");
-		
 		List<Rol> roles = rolService.consultarRoles();
 		if(roles.isEmpty()) {
 			throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No existen roles registrados.");
@@ -46,7 +43,8 @@ public class RolController {
 	}
 
 	@GetMapping(value = "/{idRol}")
-	public ResponseEntity<Rol> listarRol(@ApiParam(name="idRol", value="Valor opcional para traer los roles de un candidato.")
+	public ResponseEntity<Rol> listarRol(
+		   @ApiParam(name="idRol", value="Valor opcional para traer los roles de un candidato.")
 		   @PathVariable(name="idRol", required = true) Long idRol){
 
 		Rol rol = rolService.buscarRol(idRol);
@@ -58,22 +56,19 @@ public class RolController {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
-	public ResponseEntity<Rol> crearRol(@ApiParam(name="rol", value="Rol a crear", required = true)
+	public ResponseEntity<MensajeRespuesta> crearRol(@ApiParam(name="rol", value="Rol a crear", required = true)
 			@Valid @RequestBody Rol rol, BindingResult result){
 		if(result.hasErrors()) {
 			MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
 		}
-		Rol nuevoRol = rolService.crearRol(rol);
-		
-		HttpStatus status = (null == nuevoRol) ? HttpStatus.OK : HttpStatus.CREATED; 
-
-		return ResponseEntity.status(status).body(nuevoRol);
+		MensajeRespuesta msnRespuesta = rolService.crearRol(rol);
+		return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping(value = "/{idRol}")
-	public ResponseEntity<Rol> modificarRol(@ApiParam(name="idRol", value="Id obligatorio del rol.", required = true) 
+	public ResponseEntity<MensajeRespuesta> modificarRol(@ApiParam(name="idRol", value="Id obligatorio del rol.", required = true) 
 	        @PathVariable("idRol") Long idRol, 
 			@ApiParam(name="Rol", value="Rol a actualizar.") 
 			@Valid @RequestBody Rol rol, BindingResult result){
@@ -82,23 +77,17 @@ public class RolController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
 		}
 		rol.setIdRol(idRol);
-		Rol nuevoRol = rolService.modificarRol(rol);
-        if(null == nuevoRol) {
-        	throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol a modificar no encontrada.");
-		}
-		return ResponseEntity.ok(nuevoRol); 
+		MensajeRespuesta msnRespuesta = rolService.modificarRol(rol);
+		return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value="/{idRol}")
-	public ResponseEntity<Rol> eliminarProduto(@ApiParam(name="idRol", required = true, value="Id del rol a eliminar.") 
+	public ResponseEntity<MensajeRespuesta> eliminarProduto(@ApiParam(name="idRol", required = true, value="Id del rol a eliminar.") 
 			@PathVariable("idRol") Long idRol){
 
-		Rol rol = rolService.eliminarRol(idRol);
-		if(null == rol) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rol con id = "+idRol+" no encontrado.");
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(rol);
+		MensajeRespuesta msnRespuesta = rolService.eliminarRol(idRol);
+		return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
 	}
 
 }

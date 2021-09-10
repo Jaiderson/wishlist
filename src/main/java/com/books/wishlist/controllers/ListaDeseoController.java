@@ -91,7 +91,7 @@ public class ListaDeseoController {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
         }
-        MensajeRespuesta msnRespuesta = listaDeseoService.agregarLibroListaDeseos(libro);
+        MensajeRespuesta msnRespuesta = listaDeseoService.agregarLibroListaDeseosCreaLibro(libro);
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
 

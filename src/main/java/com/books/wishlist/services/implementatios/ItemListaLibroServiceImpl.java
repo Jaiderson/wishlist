@@ -14,6 +14,11 @@ public class ItemListaLibroServiceImpl implements ItemListaLibroService {
 	@Autowired
 	private ItemListaLibroRep itemListaLibroRep;
 
+	public ItemListaLibroServiceImpl(ItemListaLibroRep itemListaLibroRep) {
+		super();
+		this.itemListaLibroRep = itemListaLibroRep;
+	}
+
 	@Override
 	public ItemListaLibro buscarItemListaLibro(ItemListaLibro listaLibro) {
 		return itemListaLibroRep.buscarItemListaLibro(listaLibro.getPosicionLibro(),

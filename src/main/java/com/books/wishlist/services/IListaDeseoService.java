@@ -91,7 +91,7 @@ public interface IListaDeseoService {
 	 * @param libro Dto con la informacion necesaria para el registro.
 	 * @return Mensaje de respuesta con el estado http.
 	 */
-	public MensajeRespuesta agregarLibroListaDeseos(LibroNuevoDto libro);
+	public MensajeRespuesta agregarLibroListaDeseosCreaLibro(LibroNuevoDto libro);
 
 	/**
 	 * Elimina de una lista de deseos un libro dado el identificador unico de la lista de deseos 

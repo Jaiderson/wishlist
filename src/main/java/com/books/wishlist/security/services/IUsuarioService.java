@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.books.wishlist.security.entities.Usuario;
+import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
 public interface IUsuarioService {
@@ -51,12 +52,20 @@ public interface IUsuarioService {
 	public Usuario buscarUsuarioPorEmail(String email);
 
 	/***
+	 * Consulta todos los usuarios registrados cuyo nombre contenga el <b>nombre</n>.
+	 * 
+	 * @param nombre Subcadena a buscar en el nombre de usuarios.
+	 * @return Listado de usuario existentes o una lista vacia si no se encontro nada.
+	 */
+	public List<Usuario> consultarUsuarios(String nombre);
+
+	/***
 	 * Crea un nuevo usuario de usuario.
 	 * 
 	 * @param Usuario Nuevo usuario a registrar. 
 	 * @return Usuario creado o existente o <b>null</b> si el usuario ya existe.
 	 */
-	public Usuario crearUsuario(Usuario usuario);
+	public MensajeRespuesta crearUsuario(Usuario usuario);
 
 	/***
 	 * Modifica el registro de un usuario de usuario existente.
@@ -64,7 +73,7 @@ public interface IUsuarioService {
 	 * @param Usuario a modificar. 
 	 * @return Usuario actualizado correctamente o <b>null</b> si el usuario no existe.
 	 */
-	public Usuario modificarUsuario(Usuario usuario);
+	public MensajeRespuesta modificarUsuario(Usuario usuario);
 
 	/***
 	 * Modifica la contraseña de un usuario por una nueva <b>nuevaClave</b>.
@@ -73,7 +82,7 @@ public interface IUsuarioService {
 	 * @param nuevaClave Clave nueva.
 	 * @return Usuario actualizado correctamente o <b>null</b> si el usuario no existe.
 	 */
-	public Usuario modificarClaveUsuario(Long idUsuario, String nuevaClave);
+	public MensajeRespuesta modificarClaveUsuario(Long idUsuario, String nuevaClave);
 
 	/***
 	 * Elimina el registro de la cuenta de un usuario.
@@ -81,14 +90,6 @@ public interface IUsuarioService {
 	 * @param idUsuario Identificador unico del usuario a eliminar. 
 	 * @return Usuario eliminado o <b>null</b> si el usuario no existe.
 	 */
-	public Usuario eliminarUsuario(Long idUsuario);
-
-	/***
-	 * Consulta todos los usuarios registrados cuyo nombre contenga el <b>nombre</n>.
-	 * 
-	 * @param nombre Subcadena a buscar en el nombre de usuarios.
-	 * @return Listado de usuario existentes o una lista vacia si no se encontro nada.
-	 */
-	public List<Usuario> consultarUsuarios(String nombre);
+	public MensajeRespuesta eliminarUsuario(Long idUsuario);
 
 }

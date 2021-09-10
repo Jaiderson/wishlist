@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.books.wishlist.security.entities.ERol;
 import com.books.wishlist.security.entities.Rol;
+import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
 public interface IRolService {
@@ -51,7 +52,7 @@ public interface IRolService {
 	 * @param Rol Nuevo rol a registrar. 
 	 * @return Rol creado o existente o <b>null</b> si el rol ya existe.
 	 */
-	public Rol crearRol(Rol rol);
+	public MensajeRespuesta crearRol(Rol rol);
 
 	/***
 	 * Modifica el registro de un rol de usuario existente.
@@ -59,7 +60,7 @@ public interface IRolService {
 	 * @param Rol a modificar. 
 	 * @return Rol actualizado correctamente o <b>null</b> si el rol no existe.
 	 */
-	public Rol modificarRol(Rol rol);
+	public MensajeRespuesta modificarRol(Rol rol);
 
 	/***
 	 * Elimina el registro de un rol de usuario.
@@ -67,7 +68,7 @@ public interface IRolService {
 	 * @param idRol Identificador unico del rol a eliminar. 
 	 * @return Rol eliminado o <b>null</b> si el rol no existe.
 	 */
-	public Rol eliminarRol(Long idRol);
+	public MensajeRespuesta eliminarRol(Long idRol);
 
 	/***
 	 * Consulta todos los roles registrados.

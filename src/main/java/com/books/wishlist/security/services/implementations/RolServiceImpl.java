@@ -12,6 +12,7 @@ import com.books.wishlist.security.entities.ERol;
 import com.books.wishlist.security.entities.Rol;
 import com.books.wishlist.security.repositories.IRolRep;
 import com.books.wishlist.security.services.IRolService;
+import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
 @Transactional
@@ -24,7 +25,12 @@ public class RolServiceImpl implements IRolService {
 		super();
 		this.rolRep = rolRep;
 	}
-	
+
+	@Override
+	public List<Rol> consultarRoles() {
+		return rolRep.findAll();
+	}
+
 	@Override
 	public Optional<Rol> buscarRol(ERol rol) {
 		return rolRep.findByNombre(rol);
@@ -47,35 +53,72 @@ public class RolServiceImpl implements IRolService {
 
 
 	@Override
-	public Rol crearRol(Rol rol) {
+	public MensajeRespuesta crearRol(Rol rol) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
 		Rol nuevoRol = rolRep.findByNombre(rol.getNombre().name());
 		if(null == nuevoRol) {
-			return rolRep.save(rol);
+		    if(this.guardarRol(msnRespuesta, rol)) {
+		        msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+		    }
 		}
-		return null;
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.YA_EXISTE);
+			msnRespuesta.setEstado(MensajeRespuesta.YA_EXISTE);
+		}
+		return msnRespuesta;
 	}
 
 	@Override
-	public Rol modificarRol(Rol rol) {
-		Rol nuevoRol = rolRep.findByIdRol(rol.getIdRol());
+	public MensajeRespuesta modificarRol(Rol rol) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		Rol nuevoRol = rolRep.findByNombre(rol.getNombre().name());
 		if(null != nuevoRol) {
-			nuevoRol = rolRep.save(rol);
+		    if(this.guardarRol(msnRespuesta, rol)) {
+		        msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
+		    }
 		}
-		return nuevoRol;
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE);
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
 	}
 
 	@Override
-	public Rol eliminarRol(Long idRol) {
+	public MensajeRespuesta eliminarRol(Long idRol) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
 		Rol rol = rolRep.findByIdRol(idRol);
+
 		if(null != rol) {
 			rolRep.delete(rol);
+			msnRespuesta.setEstado(MensajeRespuesta.CREACION_OK);
 		}
-		return rol;
+		else {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.NO_EXISTE);
+			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
+		}
+		return msnRespuesta;
 	}
 
-	@Override
-	public List<Rol> consultarRoles() {
-		return rolRep.findAll();
+	/**
+	 * Metodo usado para guardar la informacion de un nuevo rol, en caso de encontrar
+	 * inconsistencias se guardaran en el objeto de entrada <b>msnRespuesta</b>.
+	 * 
+	 * @param msnRespuesta Objeto en el cual se guardara las inconsistencias en caso de encontrar alguna.
+	 * @param rol Rol a guardar.
+	 */
+	private boolean guardarRol(MensajeRespuesta msnRespuesta, Rol rol) {
+	    boolean isOk = false;
+		try {
+			rolRep.save(rol);
+			isOk = true;
+		}
+		catch (Exception e) {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.SQL_ERROR + " "+ e.getMessage());
+			msnRespuesta.setEstado(MensajeRespuesta.SQL_ERROR);
+			isOk = false;
+		}
+		return isOk;
 	}
 
 }
