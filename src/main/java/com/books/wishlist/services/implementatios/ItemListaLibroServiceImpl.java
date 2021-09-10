@@ -90,4 +90,23 @@ public class ItemListaLibroServiceImpl implements ItemListaLibroService {
 		return isOk;
 	}
 
+	@Override
+	public MensajeRespuesta eliminarItemsListaDeseos(Long idListaDeseo) {
+		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
+		try {
+			itemListaLibroRep.eliminarItemsListaDeseo(idListaDeseo);
+			msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+		}
+		catch(Exception e) {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.SQL_ERROR+e.getMessage());
+			msnRespuesta.setEstado(MensajeRespuesta.SQL_ERROR);
+		}
+		return msnRespuesta;
+	}
+
+	@Override
+	public ItemListaLibro buscarItemListaLibro(Long idLibro, Long idListaDeseo) {
+		return itemListaLibroRep.buscarItemListaLibro(idLibro, idListaDeseo);
+	}
+
 }

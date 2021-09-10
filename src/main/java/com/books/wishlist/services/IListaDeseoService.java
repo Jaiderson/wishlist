@@ -4,7 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.books.wishlist.entities.Libro;
+import com.books.wishlist.dto.LibroExistenteDto;
+import com.books.wishlist.dto.LibroNuevoDto;
 import com.books.wishlist.entities.ListaDeseo;
 import com.books.wishlist.utils.MensajeRespuesta;
 
@@ -73,16 +74,36 @@ public interface IListaDeseoService {
 	 */
 	public MensajeRespuesta eliminarListaDeseo(Long idLista);
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public MensajeRespuesta agregarLibroListaDeseos(Long idListaDeseo, Libro libro);
+	/**
+	 * Metodo que permite agregar un libro a una lista de deseos existente. Este metodo no valida
+	 * la pre existencia del libro por lo que la insercion puede fallar si el idLibro no existe
+	 * en la entidad <b>Libro</b>.
+	 * 
+	 * @param libro Dto con la informacion necesaria para el registro.
+	 * @return Mensaje de respuesta con el estado http.
+	 */
+	public MensajeRespuesta agregarLibroListaDeseos(LibroExistenteDto libro);
+
+	/**
+	 * Metodo que permite agregar un libro a una lista de deseos existente. Este metodo valida
+	 * la pre existencia del libro, si este no existe intenta registrarlo en la entidad <b>Libro</b>.
+	 * 
+	 * @param libro Dto con la informacion necesaria para el registro.
+	 * @return Mensaje de respuesta con el estado http.
+	 */
+	public MensajeRespuesta agregarLibroListaDeseos(LibroNuevoDto libro);
+
+	/**
+	 * Elimina de una lista de deseos un libro dado el identificador unico de la lista de deseos 
+	 * y el identificador unico del libro perteneciente a la lista. 
+	 * 
+	 * Retorna un mensaje respuesta el cual contiene el HttpStatus de la solicitud y 
+	 * un listado de inconsistencias, si todo es OK este listado sera vacio.
+	 * 
+	 * @param idListaDeseo Id unico de la lista donde se eliminara el libro.
+	 * @param idLibro Id unico del libro a quitar de la lista.
+	 * @return Mensaje de respuesta con el estado http.
+	 */
+	public MensajeRespuesta eliminarLibroListaDeseo(Long idListaDeseo, Long idLibro);	
 
 }

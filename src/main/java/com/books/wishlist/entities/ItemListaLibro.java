@@ -18,7 +18,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity(name = "book_list")
-@Table(uniqueConstraints={ @UniqueConstraint(columnNames = {"listid","bookid","book_item"}) })
+@Table(uniqueConstraints={ @UniqueConstraint(columnNames = {"listid","bookid"}),
+                           @UniqueConstraint(columnNames = {"listid","book_item"})
+                           })
 @Getter @Setter @ToString @Builder @AllArgsConstructor @NoArgsConstructor
 @Data
 public class ItemListaLibro {

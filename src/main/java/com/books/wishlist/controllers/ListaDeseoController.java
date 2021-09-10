@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.books.wishlist.entities.Libro;
+import com.books.wishlist.dto.LibroExistenteDto;
+import com.books.wishlist.dto.LibroNuevoDto;
 import com.books.wishlist.entities.ListaDeseo;
 import com.books.wishlist.services.IListaDeseoService;
 import com.books.wishlist.utils.MensajeError;
@@ -72,28 +73,34 @@ public class ListaDeseoController {
 
     //********************   METODOS PRIMORDIALES   ********************\\
 
-    @PutMapping(value="/{idListaDeseo}")
+    @PostMapping("/add-libro")
     public ResponseEntity<MensajeRespuesta> agregarLibroListaDeseo(
-           @PathVariable("idListaDeseo") Long idListaDeseo,
-           @Valid @RequestBody Libro libro, BindingResult result){
+           @Valid @RequestBody LibroExistenteDto libro, BindingResult result){
         if(result.hasErrors()) {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
         }
-        MensajeRespuesta msnRespuesta = listaDeseoService.agregarLibroListaDeseos(idListaDeseo, libro);
+        MensajeRespuesta msnRespuesta = listaDeseoService.agregarLibroListaDeseos(libro);
+        return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
+    }
+
+    @PostMapping("/add-libro-nuevo")
+    public ResponseEntity<MensajeRespuesta> agregarLibroListaDeseoCreaLibro(
+           @Valid @RequestBody LibroNuevoDto libro, BindingResult result){
+        if(result.hasErrors()) {
+            MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
+        }
+        MensajeRespuesta msnRespuesta = listaDeseoService.agregarLibroListaDeseos(libro);
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
 
     @DeleteMapping(value="/ild/{idListaDeseo}/ili/{idLibro}")
     public ResponseEntity<MensajeRespuesta> eliminarLibroListaDeseo(
            @PathVariable("idListaDeseo") Long idListaDeseo,
-           @PathVariable("idLibro") Long idLibro,
-           @Valid @RequestBody Libro libro, BindingResult result){
-        if(result.hasErrors()) {
-            MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
-        }
-        MensajeRespuesta msnRespuesta = listaDeseoService.agregarLibroListaDeseos(idListaDeseo, libro);
+           @PathVariable("idLibro") Long idLibro){
+
+        MensajeRespuesta msnRespuesta = listaDeseoService.eliminarLibroListaDeseo(idListaDeseo, idLibro);
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
 

@@ -13,10 +13,21 @@ public interface ItemListaLibroService {
 	 * La busqueda se realiza en la tabla lista de libros buscando por los siguientes 3 campos: 
 	 * id de la lista de deseos, id del libro y posicion del libro. [<b>idListaDeseo, idLibro y posicionLibro</b>]
 	 * 
-	 * @param listaLibro Lista libro a modificar.
+	 * @param listaLibro Lista libro a buscar.
 	 * @return Registro asociando a una lista de deseos un libro o <b>null</b> si no se encuantra registro.
 	 */
 	public ItemListaLibro buscarItemListaLibro(ItemListaLibro listaLibro);
+
+	/**
+	 * Busca un registro de asociacion de una lista de deseos con un libro.
+	 * La busqueda se realiza en la tabla lista de libros buscando por los siguientes 2 campos: 
+	 * id de la lista de deseos y id del libro. [<b>idListaDeseo y idLibro</b>]
+	 * 
+	 * @param idLibro Id libro.
+	 * @param idListaDeseo Id lista deseos.
+	 * @return Registro asociando a una lista de deseos un libro o <b>null</b> si no se encuantra registro.
+	 */
+	public ItemListaLibro buscarItemListaLibro(Long idLibro, Long idListaDeseo);
 
 	/**
 	 * Crea un registro asociando a una lista de deseos un libro en una posicion indiada. 
@@ -47,7 +58,7 @@ public interface ItemListaLibroService {
 	public MensajeRespuesta modificarItemListaLibro(ItemListaLibro listaLibro);
 
 	/**
-	 * Modifica el registro de asociando a una lista de deseos un libro en una posicion indiada. 
+	 * Elimina el registro de asociando a una lista de deseos un libro en una posicion indiada. 
 	 * 
 	 * Retorna un mensaje respuesta el cual contiene el HttpStatus de la solicitud y 
 	 * un listado de inconsistencias, si todo es OK este listado sera vacio.
@@ -56,5 +67,16 @@ public interface ItemListaLibroService {
 	 * @return Mensaje de respuesta con el estado http.
 	 */
 	public MensajeRespuesta eliminarItemListaLibro(Long idListaLibro);
+
+	/**
+	 * Elimina los registros asociandos a una lista de deseos. 
+	 * 
+	 * Retorna un mensaje respuesta el cual contiene el HttpStatus de la solicitud y 
+	 * un listado de inconsistencias, si todo es OK este listado sera vacio.
+	 * 
+	 * @param idListaDeseo Id unico de la lista a eliminar
+	 * @return Mensaje de respuesta con el estado http.
+	 */
+	public MensajeRespuesta eliminarItemsListaDeseos(Long idListaDeseo);
 
 }
