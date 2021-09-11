@@ -5,7 +5,7 @@ server:
     include-message: always
     include-binding-errors: always
   servlet:
-    context-path: /wishlist-api
+    context-path: /wishlist-api/v2
 
 spring:
   jackson:
