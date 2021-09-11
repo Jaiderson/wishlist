@@ -68,7 +68,7 @@ public class UsuarioController {
 				                      nuevoUsuario.getEmail(), nuevoUsuario.getNomCompleto());        
 		usuario.setClave(passwordEncoder.encode(nuevoUsuario.getPassword()));
 
-		MensajeRespuesta msnRespuesta = usuarioService.modificarUsuario(usuario);
+		MensajeRespuesta msnRespuesta = usuarioService.crearUsuario(usuario);
 		return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
 	}
 

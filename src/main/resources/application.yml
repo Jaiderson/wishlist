@@ -39,7 +39,7 @@ spring:
     show-sql: true
     database: postgresql
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 logging:

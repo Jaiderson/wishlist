@@ -111,7 +111,7 @@ public class ListaDeseoController {
     }
 
 
-    @PostMapping("/add-libro")
+    @PostMapping("/al")
     @ApiOperation(value = "Permite agreagar un libro preexistente a una lista registrada. "+
                           "Este servicio no valida si existe el libro.")
 		@ApiResponses({
@@ -131,7 +131,7 @@ public class ListaDeseoController {
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
 
-    @PostMapping("/add-libro-nuevo")
+    @PostMapping("/adln")
     @ApiOperation(value = "Permite agreagar un libro a una lista registrada. "+
                           "Este servicio no valida existe el libro, si no existe lo registra.")
 		@ApiResponses({

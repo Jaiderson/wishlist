@@ -1,4 +1,4 @@
-# wishlist
+# wishlist-api
 Desafío de la codificación que consiste en la implementación de una aplicación web que expone una API REST- ful para crear listas de deseos de libros para diferentes usuarios.
 
 ## Estructura del proyecto
@@ -118,6 +118,14 @@ corre la imagen en el puerto
 
 
 ## Funcionamiento de la API
+Para acceder a la documentación del API wishlist por favor utilice el siguiente link: 
+<a href="https://wishlist-api-meli.herokuapp.com/wishlist-api/v2/swagger-ui.html">Documentacion API wishlist</a>
 
-### Autenticacion
+### Autenticacion Bearer Token
 ``` Peticion get ..  ``` 
+
+## License
+
+<a href="https://github.com/Jaiderson/wishlist">Repositorio Git API wishlist</a>
+
+**Free Software**
