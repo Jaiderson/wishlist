@@ -1,6 +1,6 @@
 #Application Configuration TestIngresoMeLi 
 server:
-  port: 8091
+#  port: 8091
   error:
     include-message: always
     include-binding-errors: always
@@ -15,16 +15,16 @@ spring:
   # ===============================
   # HEROKU DB
   # ===============================
-#  datasource:
-#    username: lajqrlrryrncfa
-#    password: 43bd9773a0ef94ea1c33d3a751a96b24e453b278052948bba8541d15b32a941a
-#    url: jdbc:postgresql://ec2-52-71-231-37.compute-1.amazonaws.com:5432/ddvias9p8l3m4p    
+  datasource:
+    username: dcfpcroboavrps
+    password: b5f3dc834378e146849b94b784605b122d78710bb87a1bbb2c3b3286ddec4b01
+    url: jdbc:postgresql://ec2-34-228-100-83.compute-1.amazonaws.com:5432/dcm44r08fjudg3    
     
 # BD LOCAL
-  datasource:
-    username: postgres
-    password: Medellin123+-*
-    url: jdbc:postgresql://localhost:5432/wishlistDb
+#  datasource:
+#    username: postgres
+#    password: Medellin123+-*
+#    url: jdbc:postgresql://localhost:5432/wishlistDb
 
   sql:
     init:
@@ -39,7 +39,7 @@ spring:
     show-sql: true
     database: postgresql
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 logging:
