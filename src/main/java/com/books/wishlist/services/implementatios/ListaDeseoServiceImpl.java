@@ -2,8 +2,6 @@ package com.books.wishlist.services.implementatios;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +19,6 @@ import com.books.wishlist.services.ItemListaLibroService;
 import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
-@Transactional
 public class ListaDeseoServiceImpl implements IListaDeseoService {
 
 	public ListaDeseoServiceImpl(ILibroService libroService, 

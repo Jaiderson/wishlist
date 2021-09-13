@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.books.wishlist.entities.ERol;
 import com.books.wishlist.entities.Rol;
@@ -15,7 +14,6 @@ import com.books.wishlist.services.IRolService;
 import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
-@Transactional
 public class RolServiceImpl implements IRolService {
 
 	@Autowired
