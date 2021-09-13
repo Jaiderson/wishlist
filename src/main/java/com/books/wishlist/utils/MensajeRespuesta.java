@@ -18,6 +18,7 @@ public class MensajeRespuesta {
 	public static final String SQL_ERROR = "Error en recursos de base de datos. ";
 	public static final String CREACION_OK = "Registrado ingresado correctamente. ";
 	public static final String PROCESO_OK = "Proceso finalizado correctamente. ";
+	public static final String NO_ES_PROPIETARIO = "Solicitud rechazada. Acceso al recurso no es propiedad de ";
 
 	private List<String> listaInconsistencias = Lists.newArrayList();
 
@@ -31,7 +32,7 @@ public class MensajeRespuesta {
 			result = HttpStatus.CONFLICT;
 		}
 		else if(this.estado.equals(SQL_ERROR)) {
-			result = HttpStatus.INTERNAL_SERVER_ERROR;
+			result = HttpStatus.FORBIDDEN;
 		}
 		else if(this.estado.equals(NO_EXISTE)) {
 			result = HttpStatus.NOT_FOUND;
@@ -41,6 +42,9 @@ public class MensajeRespuesta {
 		}
 		else if(this.estado.equals(PROCESO_OK)) {
 			result = HttpStatus.OK;
+		}
+		else if(this.estado.equals(NO_ES_PROPIETARIO)) {
+			result = HttpStatus.UNAUTHORIZED;
 		}
 		return result;
 	}

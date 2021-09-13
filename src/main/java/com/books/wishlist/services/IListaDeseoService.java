@@ -6,11 +6,20 @@ import org.springframework.stereotype.Service;
 
 import com.books.wishlist.dto.LibroExistenteDto;
 import com.books.wishlist.dto.LibroNuevoDto;
+import com.books.wishlist.entities.Libro;
 import com.books.wishlist.entities.ListaDeseo;
 import com.books.wishlist.utils.MensajeRespuesta;
 
 @Service
 public interface IListaDeseoService {
+
+	/**
+	 * Busca un listado libros asociado a una lista de deseos dado su identificador unico <b>idListaDeseo</b>
+	 * 
+	 * @param idListaDeseo Identificador unico de la lista de deseos.
+	 * @return Lista de deseos o <b>null</b> si no la encuentra.
+	 */
+	public List<Libro> buscarLibrosListaDeseo(Long idListaDeseo);
 
 	/**
 	 * Busca una lista de deseos dado su identificador unico de usuario <b>idUsuario</b>.
@@ -106,4 +115,12 @@ public interface IListaDeseoService {
 	 */
 	public MensajeRespuesta eliminarLibroListaDeseo(Long idListaDeseo, Long idLibro);	
 
+	/**
+	 * Permite validar si un usuario que solicita acceso a un recurso sea el propietario de dichos recursos.
+	 * 
+	 * @param idUsuario Id de usuario a validar.
+	 * @param nombreUsuario Nombre del usuario que solicita acceso.
+	 * @return True si es el usuario propietario.
+	 */
+	public boolean isUsuarioPropietario(Long idUsuario, String nombreUsuario);
 }

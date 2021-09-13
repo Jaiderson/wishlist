@@ -106,4 +106,9 @@ public class LibroServiceImpl implements ILibroService {
 		return isOk;
 	}
 
+	@Override
+	public List<Libro> buscarLibrosPorLista(Long idListaDeseo) {
+		return libroRep.buscarLibrosPorLista(idListaDeseo);
+	}
+
 }

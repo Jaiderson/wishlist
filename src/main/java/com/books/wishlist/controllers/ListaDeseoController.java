@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,10 +22,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.books.wishlist.dto.LibroExistenteDto;
 import com.books.wishlist.dto.LibroNuevoDto;
+import com.books.wishlist.dto.ListasUsuario;
 import com.books.wishlist.entities.ListaDeseo;
 import com.books.wishlist.services.IListaDeseoService;
 import com.books.wishlist.utils.MensajeError;
 import com.books.wishlist.utils.MensajeRespuesta;
+import com.google.common.collect.Lists;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,6 +37,9 @@ import io.swagger.annotations.ApiResponses;
 @Controller
 @RequestMapping(value = "/listaDeseos")
 public class ListaDeseoController {
+
+	public static final String NO_ES_PROPIETARIO = "Solicitud rechazada. Acceso al recurso no es propiedad de ";
+	public static final Long ID_INEXISTENTE = -150L;
 
 	@Autowired
 	private IListaDeseoService listaDeseoService;
@@ -44,14 +51,28 @@ public class ListaDeseoController {
         @ApiResponse(code = 401, message = "Acceso al recurso no autorizado."),
         @ApiResponse(code = 404, message = "Sin listas registradas.")
     })
-    public ResponseEntity<List<ListaDeseo>> buscarListasDeseoPorIdUsuario(
+    public ResponseEntity<List<ListasUsuario>> buscarListasDeseoPorIdUsuario(
     		@ApiParam(name="idUsuario", value="Id de usuario.")
     		@PathVariable(name="idUsuario", required = true) Long idUsuario){
-        List<ListaDeseo> listasDeseos = listaDeseoService.buscarListasDeseoPorIdUsuario(idUsuario);
+        
+        if(!listaDeseoService.isUsuarioPropietario(idUsuario, getUsuario())) {
+        	throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, NO_ES_PROPIETARIO + getUsuario());
+        }
+
+    	List<ListaDeseo> listasDeseos = listaDeseoService.buscarListasDeseoPorIdUsuario(idUsuario);
         if(listasDeseos.isEmpty()) {
         	throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No existen listas de deseos registradas para el usuario id = "+idUsuario);
         }
-        return ResponseEntity.ok(listasDeseos); 
+        List<ListasUsuario> listasUsuario = Lists.newArrayList(); 
+        listasDeseos.stream().forEach(lista -> {
+        	listasUsuario.add(ListasUsuario.convertirListaDeseo(lista));
+        });
+        
+        listasUsuario.stream().forEach(listaDeseo ->{
+        	listaDeseo.setLibros(listaDeseoService.buscarLibrosListaDeseo(listaDeseo.getIdLista()));
+        });
+
+        return ResponseEntity.ok(listasUsuario); 
     }
 
     @PostMapping
@@ -68,6 +89,9 @@ public class ListaDeseoController {
         if(result.hasErrors()) {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
+        }
+        if(!listaDeseoService.isUsuarioPropietario(nuevaLista.getUsuario().getIdUsuario(), getUsuario())) {
+        	throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, NO_ES_PROPIETARIO + getUsuario());
         }
         MensajeRespuesta msnRespuesta = listaDeseoService.crearListaDeseo(nuevaLista);
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
@@ -89,6 +113,9 @@ public class ListaDeseoController {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
         }
+        if(!listaDeseoService.isUsuarioPropietario(lista.getUsuario().getIdUsuario(), getUsuario())) {
+        	throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, NO_ES_PROPIETARIO + getUsuario());
+        }
         MensajeRespuesta msnRespuesta = listaDeseoService.modificarListaDeseo(lista);
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
@@ -106,6 +133,12 @@ public class ListaDeseoController {
     	   @ApiParam(name="idListaDeseo", value="Id de la ista a eliminar.")
            @PathVariable("idListaDeseo") Long idListaDeseo){
 
+    	ListaDeseo listaDeseo = listaDeseoService.buscarListaDeseo(idListaDeseo);
+    	Long idUsuario = (null == listaDeseo) ? ID_INEXISTENTE : listaDeseo.getUsuario().getIdUsuario();
+
+    	if(idUsuario.equals(ID_INEXISTENTE) || !listaDeseoService.isUsuarioPropietario(idUsuario, getUsuario())) {
+        	throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, NO_ES_PROPIETARIO + getUsuario());
+        }
         MensajeRespuesta msnRespuesta = listaDeseoService.eliminarListaDeseo(idListaDeseo);
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
@@ -127,6 +160,12 @@ public class ListaDeseoController {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
         }
+    	ListaDeseo listaDeseo = listaDeseoService.buscarListaDeseo(libro.getIdListaDeseo());
+    	Long idUsuario = (null == listaDeseo) ? ID_INEXISTENTE : listaDeseo.getUsuario().getIdUsuario();
+
+    	if(idUsuario.equals(ID_INEXISTENTE) || !listaDeseoService.isUsuarioPropietario(idUsuario, getUsuario())) {
+        	throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, NO_ES_PROPIETARIO + getUsuario());
+        }
         MensajeRespuesta msnRespuesta = listaDeseoService.agregarLibroListaDeseos(libro);
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
@@ -146,6 +185,12 @@ public class ListaDeseoController {
             MensajeError msnError = new MensajeError(MensajeError.CREAR_REGISTRO);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, msnError.getMensaje(result));
         }
+    	ListaDeseo listaDeseo = listaDeseoService.buscarListaDeseo(libro.getIdListaDeseo());
+    	Long idUsuario = (null == listaDeseo) ? ID_INEXISTENTE : listaDeseo.getUsuario().getIdUsuario();
+
+    	if(idUsuario.equals(ID_INEXISTENTE) || !listaDeseoService.isUsuarioPropietario(idUsuario, getUsuario())) {
+        	throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, NO_ES_PROPIETARIO + getUsuario());
+        }
         MensajeRespuesta msnRespuesta = listaDeseoService.agregarLibroListaDeseosCreaLibro(libro);
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
     }
@@ -162,8 +207,21 @@ public class ListaDeseoController {
            @PathVariable("idListaDeseo") Long idListaDeseo,
            @PathVariable("idLibro") Long idLibro){
 
+    	ListaDeseo listaDeseo = listaDeseoService.buscarListaDeseo(idListaDeseo);
+    	Long idUsuario = (null == listaDeseo) ? ID_INEXISTENTE : listaDeseo.getUsuario().getIdUsuario();
+
+    	if(idUsuario.equals(ID_INEXISTENTE) || !listaDeseoService.isUsuarioPropietario(idUsuario, getUsuario())) {
+        	throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, NO_ES_PROPIETARIO + getUsuario());
+        }
         MensajeRespuesta msnRespuesta = listaDeseoService.eliminarLibroListaDeseo(idListaDeseo, idLibro);
         return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
+    }
+
+    private String getUsuario() {
+    	UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+
+        return userDetails.getUsername();
     }
 
 }

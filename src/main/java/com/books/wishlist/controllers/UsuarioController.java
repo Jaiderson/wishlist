@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -113,6 +114,7 @@ public class UsuarioController {
 		return ResponseEntity.status(msnRespuesta.generarEstadoHttp()).body(msnRespuesta);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value = "/{idUsuario}")
     @ApiOperation(value = "Permite eliminar un usuario.")
     @ApiResponses({

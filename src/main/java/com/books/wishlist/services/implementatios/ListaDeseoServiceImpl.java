@@ -16,6 +16,7 @@ import com.books.wishlist.entities.Usuario;
 import com.books.wishlist.repositories.IListaDeseoRep;
 import com.books.wishlist.services.ILibroService;
 import com.books.wishlist.services.IListaDeseoService;
+import com.books.wishlist.services.IUsuarioService;
 import com.books.wishlist.services.ItemListaLibroService;
 import com.books.wishlist.utils.MensajeRespuesta;
 
@@ -31,6 +32,9 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 		this.libroService  = libroService;
 		this.itemListaLibroService = itemListaLibroService;
 	}
+
+	@Autowired
+	private IUsuarioService usuarioService;
 
 	@Autowired
 	private IListaDeseoRep listaDeseoRep;
@@ -112,8 +116,10 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 		try {
 			msnRespuesta = itemListaLibroService.eliminarItemsListaDeseos(listaDeseo.getIdLista());
 			if(msnRespuesta.getEstado().equals(MensajeRespuesta.PROCESO_OK)) {
-				listaDeseoRep.delete(listaDeseo);
-				msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+				if(eliminarListaDeseos(msnRespuesta, listaDeseo)) {
+					listaDeseoRep.delete(listaDeseo);
+					msnRespuesta.setEstado(MensajeRespuesta.PROCESO_OK);
+				}
 			}
 		}
 		catch (Exception e) {
@@ -144,26 +150,25 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 		return isOk;
 	}
 
+	private boolean eliminarListaDeseos(MensajeRespuesta msnRespuesta, ListaDeseo listaDeseos) {
+	    boolean isOk = false;
+		try {
+			listaDeseoRep.delete(listaDeseos);
+			isOk = true;
+		}
+		catch (Exception e) {
+			msnRespuesta.getListaInconsistencias().add(MensajeRespuesta.SQL_ERROR + " "+ e.getMessage());
+			msnRespuesta.setEstado(MensajeRespuesta.SQL_ERROR);
+			isOk = false;
+		}
+		return isOk;
+	}
+
 	@Override
 	public List<ListaDeseo> buscarListasDeseoPorIdUsuario(Long idUsuario) {
 		return listaDeseoRep.findByUsuario(Usuario.builder().idUsuario(idUsuario).build());
 	}
 
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public MensajeRespuesta agregarLibroListaDeseos(LibroExistenteDto libro) {
 		MensajeRespuesta msnRespuesta = new MensajeRespuesta();
@@ -220,6 +225,16 @@ public class ListaDeseoServiceImpl implements IListaDeseoService {
 			msnRespuesta.setEstado(MensajeRespuesta.NO_EXISTE);
 		}		
 		return msnRespuesta;
+	}
+
+	@Override
+	public List<Libro> buscarLibrosListaDeseo(Long idListaDeseo) {
+		return libroService.buscarLibrosPorLista(idListaDeseo);
+	}
+
+	@Override
+	public boolean isUsuarioPropietario(Long idUsuario, String nombreUsuario) {
+		return usuarioService.buscarUsuarioPorId(idUsuario).getNomUsuario().equals(nombreUsuario);
 	}
 
 }

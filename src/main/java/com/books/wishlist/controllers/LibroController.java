@@ -69,7 +69,7 @@ public class LibroController {
 	@ApiResponse(code = 401, message = "Acceso al recurso no autorizado."),
 	@ApiResponse(code = 404, message = "No se encontraron libros.")
 	})
-    public ResponseEntity<RespuestaLibroDto> buscarLibroApiGoogleProParametro(
+    public ResponseEntity<RespuestaLibroDto> buscarLibroApiGooglePorParametro(
     		@ApiParam(name="datoGeneral", value="Valor del contenido a buscar. Puede ser el nombre del libro o autor, etc.")
     		@PathVariable(name="datoGeneral", required = true) String datoGeneral,
     		@ApiParam(name="busqueda", value="Objeto con los valores personalizados de busqueda. "+

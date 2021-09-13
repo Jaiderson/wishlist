@@ -10,6 +10,9 @@ import com.books.wishlist.utils.MensajeRespuesta;
 @Service
 public interface ILibroService {
 
+	
+	public List<Libro> buscarLibrosPorLista(Long idListaDeseo);
+	
 	/**
 	 * Busca libros dado el nombre o palabra clave del libro <b>nombreLibro</b>.
 	 * 

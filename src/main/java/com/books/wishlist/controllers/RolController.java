@@ -71,7 +71,6 @@ public class RolController {
 		return ResponseEntity.ok(rol);
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping
 	public ResponseEntity<MensajeRespuesta> crearRol(@ApiParam(name="rol", value="Rol a crear", required = true)
 			@Valid @RequestBody Rol rol, BindingResult result){

@@ -32,7 +32,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity(name="wish_list")
-@Table(uniqueConstraints={ @UniqueConstraint(columnNames = {"userid","list_item","listname"})
+@Table(uniqueConstraints={ @UniqueConstraint(columnNames = {"userid","list_item","listname"}),
+		@UniqueConstraint(columnNames = {"userid","list_item"})
                           }) 
 @NoArgsConstructor @AllArgsConstructor @Builder @Getter @Setter @ToString @EqualsAndHashCode
 @Data
